@@ -26,6 +26,17 @@ class PostEditFragment : BaseFragment() {
 
         viewModel.fetchBlogEntry(args.postId)
 
+        viewModel.state.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                PostEditViewModel.State.SUCCESS -> {
+                    findNavController().navigateUp()
+                }
+                PostEditViewModel.State.ERROR -> {
+                    // TODO: { Mostrar un mensaje de error y arreglar el estado. }
+                }
+            }
+        })
+
         viewModel.post.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 onPostChange(it)
