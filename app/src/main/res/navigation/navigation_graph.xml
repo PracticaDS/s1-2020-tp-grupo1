@@ -26,7 +26,11 @@
         android:id="@+id/postEditFragment"
         android:name="ar.edu.unq.pdes.myprivateblog.screens.post_edit.PostEditFragment"
         android:label="PostEditFragment"
-        tools:layout="@layout/fragment_post_edit" />
+        tools:layout="@layout/fragment_post_edit" >
+        <argument
+            android:name="postId"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/postDetailFragment"
