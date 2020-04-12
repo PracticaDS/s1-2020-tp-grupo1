@@ -53,9 +53,9 @@
 
         <action
             android:id="@+id/nav_action_save_new_post"
-            app:popUpTo="@id/postCreateFragment"
-            app:popUpToInclusive="true"
-            app:destination="@id/postDetailFragment" />
+            app:destination="@id/postDetailFragment"
+            app:popUpTo="@id/postsListingFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
 </navigation>
