@@ -11,8 +11,10 @@ import ar.edu.unq.pdes.myprivateblog.BaseFragment
 import ar.edu.unq.pdes.myprivateblog.ColorUtils
 import ar.edu.unq.pdes.myprivateblog.R
 import ar.edu.unq.pdes.myprivateblog.data.BlogEntry
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_post_edit.*
 import java.io.File
+
 
 class PostEditFragment : BaseFragment() {
     override val layoutId = R.layout.fragment_post_edit
@@ -29,9 +31,12 @@ class PostEditFragment : BaseFragment() {
         viewModel.state.observe(viewLifecycleOwner, Observer {
             when(it) {
                 PostEditViewModel.State.SUCCESS -> {
+                    Snackbar.make(view, getString(R.string.PostEditSuccess), Snackbar.LENGTH_LONG).show()
+
                     findNavController().navigateUp()
                 }
                 PostEditViewModel.State.ERROR -> {
+
                     // TODO: { Mostrar un mensaje de error y arreglar el estado. }
                 }
             }
