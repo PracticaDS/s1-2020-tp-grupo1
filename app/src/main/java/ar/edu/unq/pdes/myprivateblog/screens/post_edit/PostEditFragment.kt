@@ -1,5 +1,6 @@
 package ar.edu.unq.pdes.myprivateblog.screens.post_edit
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doOnTextChanged
@@ -31,7 +32,15 @@ class PostEditFragment : BaseFragment() {
         viewModel.state.observe(viewLifecycleOwner, Observer {
             when(it) {
                 PostEditViewModel.State.SUCCESS -> {
-                    Snackbar.make(view, getString(R.string.PostEditSuccess), Snackbar.LENGTH_LONG).show()
+
+                    val snackbar: Snackbar = Snackbar.make(
+                        view,
+                        getString(R.string.PostEditSuccess),
+                        Snackbar.LENGTH_LONG
+                    )
+                    val snackbarView: View = snackbar.view
+                    snackbarView.setBackgroundColor(Color.parseColor("#33cc33"))
+                    snackbar.show()
 
                     findNavController().navigateUp()
                 }
