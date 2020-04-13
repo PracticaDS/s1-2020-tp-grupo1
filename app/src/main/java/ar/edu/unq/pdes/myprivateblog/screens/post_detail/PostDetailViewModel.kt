@@ -7,6 +7,7 @@ import ar.edu.unq.pdes.myprivateblog.data.BlogEntriesRepository
 import ar.edu.unq.pdes.myprivateblog.data.BlogEntry
 import ar.edu.unq.pdes.myprivateblog.data.EntityID
 import ar.edu.unq.pdes.myprivateblog.rx.RxSchedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 class PostDetailViewModel @Inject constructor(
@@ -24,5 +25,14 @@ class PostDetailViewModel @Inject constructor(
             .subscribe {
                 post.value = it
             }
+    }
+
+    fun deletePost() {
+        blogEntriesRepository.deleteBlogEntry(post.value!!)
+            .compose(RxSchedulers.completableAsync())
+            .subscribe {
+                Timber.i("Sarasa")
+            }
+
     }
 }

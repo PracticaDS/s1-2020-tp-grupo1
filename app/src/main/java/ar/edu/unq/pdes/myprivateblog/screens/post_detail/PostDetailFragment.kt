@@ -41,6 +41,11 @@ class PostDetailFragment : BaseFragment() {
             findNavController().navigate(PostDetailFragmentDirections.navActionEditPost(args.postId))
         }
 
+        btn_delete_post.setOnClickListener {
+            viewModel.deletePost()
+            findNavController().navigateUp()
+        }
+
     }
 
     fun renderBlogEntry(post: BlogEntry) {
