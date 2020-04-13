@@ -2,5 +2,4 @@
     <string name="app_name">MyPrivateBlog</string>
     <string name="hint_post_title">My Post Title</string>
     <string name="PostEditSuccess">Post editado.</string>
-    <string name="delete_button">Borrar post</string>
 </resources>
