@@ -26,8 +26,8 @@ fun withTintColor(expectedColor: Int): Matcher<View?>? {
     }
 }
 
-fun withBackgroundColor(expectedColor: Int): Matcher<View?>? {
-    return object : BoundedMatcher<View?, View>(View::class.java) {
+fun withBackgroundColor(expectedColor: Int): Matcher<View> {
+    return object : BoundedMatcher<View, View>(View::class.java) {
 
         override fun describeTo(description: Description) {
             description.appendText("Checking the matcher on received view: ")
