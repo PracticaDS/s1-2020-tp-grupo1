@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -40,12 +41,7 @@ class PostsListingFragment : BaseFragment() {
             }
             posts_list_recyclerview.layoutManager = LinearLayoutManager(context)
 
-            if(postList.isNotEmpty()){
-                no_posts.visibility = View.GONE
-            }
-            else {
-                no_posts.visibility = View.VISIBLE
-            }
+            no_posts.isVisible = postList.isEmpty()
 
         })
     }
