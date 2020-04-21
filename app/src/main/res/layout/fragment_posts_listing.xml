@@ -12,7 +12,8 @@
         android:layout_height="match_parent"
         android:background="@color/palette_pastel_yellow_02" />
 
-    <ar.edu.unq.pdes.myprivateblog.widgets.NoPosts
+
+    <include layout="@layout/fragment_no_posts"
         android:id="@+id/no_posts"
         android:layout_width="301dp"
         android:layout_height="484dp"
@@ -20,7 +21,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/posts_list_recyclerview"
-        app:layout_constraintVertical_bias="0.514" />
+        app:layout_constraintVertical_bias="0.514"
+        />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/create_new_post"
