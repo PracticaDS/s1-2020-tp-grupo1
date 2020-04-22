@@ -30,7 +30,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:padding="12dp"
         android:src="@drawable/ic_delete"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_edit"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
