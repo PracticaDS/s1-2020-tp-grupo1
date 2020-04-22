@@ -123,7 +123,7 @@ workflows:
             # debug log
             set -x
 
-            curl -X POST -H "Content-Type: application/json" -d "{\"text\": \"Build Success! (Path: $BITRISE_APK_PATH) \n build: $BITRISE_BUILD_NUMBER \n status: $BITRISE_BUILD_STATUS\"}" $SLACK_KEY
+            curl -X POST -H "Content-Type: application/json" -d "{\"text\": \"Build Success! 2 (Path: $BITRISE_APK_PATH) \n build: $BITRISE_BUILD_NUMBER \n status: $BITRISE_BUILD_STATUS\"}" $SLACK_KEY
         title: Send build success notification to slack
     - deploy-to-bitrise-io@1.9.2: {}
     - cache-push@2.2.1: {}
