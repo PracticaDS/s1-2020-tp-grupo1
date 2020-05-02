@@ -7,29 +7,27 @@ import ar.edu.unq.pdes.myprivateblog.data.BlogEntriesRepository
 import ar.edu.unq.pdes.myprivateblog.data.BlogEntry
 import ar.edu.unq.pdes.myprivateblog.data.EntityID
 import ar.edu.unq.pdes.myprivateblog.rx.RxSchedulers
+import ar.edu.unq.pdes.myprivateblog.services.BlogEntriesService
 import timber.log.Timber
 import javax.inject.Inject
 
 class PostDetailViewModel @Inject constructor(
-    val blogEntriesRepository: BlogEntriesRepository,
+    val blogEntriesService: BlogEntriesService,
     val context: Context
 ) : ViewModel() {
 
     var post = MutableLiveData<BlogEntry?>()
 
-    fun fetchBlogEntry(id: EntityID) {
 
-        val disposable = blogEntriesRepository
-            .fetchById(id)
-            .compose(RxSchedulers.flowableAsync())
-            .subscribe {
+
+    fun fetchBlogEntry(id: EntityID) {
+        val disposable= blogEntriesService.fetchBlogEntry(id).subscribe {
                 post.value = it
             }
     }
 
     fun deletePost() {
-        blogEntriesRepository.deleteBlogEntry(post.value!!)
-            .compose(RxSchedulers.completableAsync())
+        val disposable = blogEntriesService.deleteBlogEntry(post.value!!)
             .subscribe {
                 Timber.i("Sarasa")
             }

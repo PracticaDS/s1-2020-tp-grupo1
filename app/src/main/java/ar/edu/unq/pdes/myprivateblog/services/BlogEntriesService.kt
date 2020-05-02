@@ -4,8 +4,10 @@ import android.content.Context
 import ar.edu.unq.pdes.myprivateblog.BaseApplication
 import ar.edu.unq.pdes.myprivateblog.data.BlogEntriesRepository
 import ar.edu.unq.pdes.myprivateblog.data.BlogEntry
+import ar.edu.unq.pdes.myprivateblog.data.EntityID
 import ar.edu.unq.pdes.myprivateblog.rx.RxSchedulers
 import ar.edu.unq.pdes.myprivateblog.screens.post_create.PostCreateViewModel
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.io.OutputStreamWriter
@@ -49,5 +51,16 @@ class BlogEntriesService @Inject constructor(
         outputStreamWriter.use { it.write(body) }
         return fileName
     }
+
+    fun fetchBlogEntry(id: EntityID):Flowable<BlogEntry>{
+        return blogEntriesRepository.fetchById(id)
+            .compose(RxSchedulers.flowableAsync())
+    }
+
+    fun deleteBlogEntry(blogEntry: BlogEntry): Completable {
+        return blogEntriesRepository.deleteBlogEntry(blogEntry)
+            .compose(RxSchedulers.completableAsync())
+    }
+
 
 }
