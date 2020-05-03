@@ -9,6 +9,7 @@ import ar.edu.unq.pdes.myprivateblog.rx.RxSchedulers
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.io.File
 import java.io.OutputStreamWriter
 import java.util.*
 import javax.inject.Inject
@@ -97,5 +98,8 @@ class BlogEntriesService @Inject constructor(
         return blogEntriesRepository.getAllBlogEntries()
     }
 
+    fun getBody(blogEntry: BlogEntry): String {
+        return File(context.filesDir, blogEntry.bodyPath).readText()
+    }
 
 }

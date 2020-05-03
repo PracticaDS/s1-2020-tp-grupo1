@@ -1,6 +1,7 @@
 package ar.edu.unq.pdes.myprivateblog.screens.post_edit
 
 import android.content.Context
+import android.database.DatabaseUtils
 import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,6 +48,10 @@ class PostEditViewModel @Inject constructor(
         titleText.value = _title
         cardColor.value = _cardColor
         bodyText.value = _body
+    }
+
+    fun getBody(blogEntry: BlogEntry): String {
+        return blogEntriesService.getBody(blogEntry)
     }
 
 }

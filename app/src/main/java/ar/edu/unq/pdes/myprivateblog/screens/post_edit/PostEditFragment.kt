@@ -93,15 +93,12 @@ class PostEditFragment : BaseFragment() {
     private fun onPostChange(blogEntry: BlogEntry) {
         val title = blogEntry.title
         val cardColor = blogEntry.cardColor
-        val body = getBody(blogEntry)
+        val body = viewModel.getBody(blogEntry)
 
         viewModel.onPostChange(title, cardColor, body)
         renderBlogEntry(title, cardColor, body)
     }
 
-    private fun getBody(blogEntry: BlogEntry): String {
-        return File(context?.filesDir, blogEntry.bodyPath).readText()
-    }
 
     private fun renderBlogEntry(_title: String, _cardColor: Int, _body: String) {
         title.setText(_title)
