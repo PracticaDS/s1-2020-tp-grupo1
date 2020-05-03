@@ -1,7 +1,6 @@
 package ar.edu.unq.pdes.myprivateblog.screens.post_edit
 
 import android.content.Context
-import android.database.DatabaseUtils
 import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +11,7 @@ import javax.inject.Inject
 
 
 class PostEditViewModel @Inject constructor(
-    val blogEntriesService: BlogEntriesService,
+    private val blogEntriesService: BlogEntriesService,
     val context: Context
 ) : ViewModel() {
 
@@ -24,16 +23,16 @@ class PostEditViewModel @Inject constructor(
     var post = MutableLiveData<BlogEntry?>()
     val titleText = MutableLiveData("")
     val bodyText = MutableLiveData("")
-    val cardColor = MutableLiveData<Int>(Color.LTGRAY)
-
-
-
+    val cardColor = MutableLiveData(Color.LTGRAY)
 
     fun fetchBlogEntry(id: EntityID) {
         val disposable = blogEntriesService
             .fetchBlogEntry(id)
             .subscribe {
                 post.value = it
+                titleText.value = it.title
+                cardColor.value = it.cardColor
+                bodyText.value = getBody(it)
             }
     }
 
@@ -42,12 +41,6 @@ class PostEditViewModel @Inject constructor(
             ?.subscribe {
                 state.value = State.SUCCESS
             }
-    }
-
-    fun onPostChange(_title: String, _cardColor: Int, _body: String) {
-        titleText.value = _title
-        cardColor.value = _cardColor
-        bodyText.value = _body
     }
 
     fun getBody(blogEntry: BlogEntry): String {

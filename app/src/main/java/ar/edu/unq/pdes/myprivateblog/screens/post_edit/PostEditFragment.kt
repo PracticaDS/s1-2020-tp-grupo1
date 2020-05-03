@@ -11,10 +11,8 @@ import androidx.navigation.fragment.navArgs
 import ar.edu.unq.pdes.myprivateblog.BaseFragment
 import ar.edu.unq.pdes.myprivateblog.ColorUtils
 import ar.edu.unq.pdes.myprivateblog.R
-import ar.edu.unq.pdes.myprivateblog.data.BlogEntry
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_post_edit.*
-import java.io.File
 
 
 class PostEditFragment : BaseFragment() {
@@ -51,9 +49,15 @@ class PostEditFragment : BaseFragment() {
             }
         })
 
-        viewModel.post.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                onPostChange(it)
+        viewModel.titleText.observe(viewLifecycleOwner, Observer {
+            if(!it.equals(title.text.toString())) {
+                title.setText(it)
+            }
+        })
+
+        viewModel.bodyText.observe(viewLifecycleOwner, Observer {
+            if(!it.equals(body.toFormattedHtml())) {
+                body.setText(it)
             }
         })
 
@@ -88,24 +92,6 @@ class PostEditFragment : BaseFragment() {
             closeAndGoBack()
         }
 
-    }
-
-    private fun onPostChange(blogEntry: BlogEntry) {
-        val title = blogEntry.title
-        val cardColor = blogEntry.cardColor
-        val body = viewModel.getBody(blogEntry)
-
-        viewModel.onPostChange(title, cardColor, body)
-        renderBlogEntry(title, cardColor, body)
-    }
-
-
-    private fun renderBlogEntry(_title: String, _cardColor: Int, _body: String) {
-        title.setText(_title)
-        header_background.setBackgroundColor(_cardColor)
-        applyStatusBarStyle(_cardColor)
-        title.setTextColor(ColorUtils.findTextColorGivenBackgroundColor(_cardColor))
-        body.setText(_body)
     }
 
     private fun closeAndGoBack() {
