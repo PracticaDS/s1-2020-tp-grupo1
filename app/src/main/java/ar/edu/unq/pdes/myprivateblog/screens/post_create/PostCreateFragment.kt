@@ -18,11 +18,12 @@ import org.wordpress.aztec.glideloader.GlideVideoThumbnailLoader
 import org.wordpress.aztec.toolbar.IAztecToolbarClickListener
 import timber.log.Timber
 
-class PostCreateFragment : BaseFragment() {
+open class PostCreateFragment : BaseFragment() {
     override val layoutId = R.layout.fragment_post_edit
 
-    private val viewModel by viewModels<PostCreateViewModel> { viewModelFactory }
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    protected open val viewModel by viewModels<PostCreateViewModel> { viewModelFactory }
+    lateinit var firebaseAnalytics: FirebaseAnalytics
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!);
@@ -35,19 +36,28 @@ class PostCreateFragment : BaseFragment() {
             when (it) {
 
                 PostCreateViewModel.State.ERROR -> {
-                    // TODO: manage error states
+                    onError(view)
                 }
 
                 PostCreateViewModel.State.SUCCESS -> {
-                    findNavController().navigate(
-                        PostCreateFragmentDirections.navActionSaveNewPost(
-                            viewModel.post
-                        )
-                    )
+                    onSuccess(view)
                 }
 
-                else -> { /* Do nothing, should not happen*/
+                PostCreateViewModel.State.EDITING -> {
+
                 }
+            }
+        })
+
+        viewModel.titleText.observe(viewLifecycleOwner, Observer {
+            if(!it.equals(title.text.toString())) {
+                title.setText(it)
+            }
+        })
+
+        viewModel.bodyText.observe(viewLifecycleOwner, Observer {
+            if(!it.equals(body.toFormattedHtml())) {
+                body.fromHtml(it)
             }
         })
 
@@ -68,13 +78,10 @@ class PostCreateFragment : BaseFragment() {
 
         body.doOnTextChanged { text, start, count, after ->
             viewModel.bodyText.value = body.toFormattedHtml()
-            Timber.d(viewModel.bodyText.value)
         }
 
         btn_save.setOnClickListener {
-            trackEvent()
-            viewModel.createPost()
-
+            onSave()
         }
 
         btn_close.setOnClickListener {
@@ -116,6 +123,23 @@ class PostCreateFragment : BaseFragment() {
         }
 
 
+    }
+
+    protected open fun onSave() {
+        trackEvent()
+        viewModel.createPost()
+    }
+
+    protected open fun onSuccess(view:View) {
+        findNavController().navigate(
+            PostCreateFragmentDirections.navActionSaveNewPost(
+                viewModel.postId
+            )
+        )
+    }
+
+    protected open fun onError(view:View){
+        // TODO: manage error states
     }
 
     private fun closeAndGoBack() {

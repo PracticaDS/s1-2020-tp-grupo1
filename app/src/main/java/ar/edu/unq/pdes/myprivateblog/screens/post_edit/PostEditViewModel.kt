@@ -6,24 +6,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ar.edu.unq.pdes.myprivateblog.data.BlogEntry
 import ar.edu.unq.pdes.myprivateblog.data.EntityID
+import ar.edu.unq.pdes.myprivateblog.screens.post_create.PostCreateViewModel
 import ar.edu.unq.pdes.myprivateblog.services.BlogEntriesService
 import javax.inject.Inject
 
 
 class PostEditViewModel @Inject constructor(
-    private val blogEntriesService: BlogEntriesService,
-    val context: Context
-) : ViewModel() {
+    blogEntriesService: BlogEntriesService,
+    context: Context
+) : PostCreateViewModel(blogEntriesService, context) {
 
-    enum class State {
-        EDITING, SUCCESS, ERROR
-    }
-
-    val state = MutableLiveData(State.EDITING)
-    var post = MutableLiveData<BlogEntry?>()
-    val titleText = MutableLiveData("")
-    val bodyText = MutableLiveData("")
-    val cardColor = MutableLiveData(Color.LTGRAY)
+    val post = MutableLiveData<BlogEntry?>()
 
     fun fetchBlogEntry(id: EntityID) {
         val disposable = blogEntriesService
