@@ -1,12 +1,11 @@
 package ar.edu.unq.pdes.myprivateblog.services
 
 import android.content.Context
-import ar.edu.unq.pdes.myprivateblog.BaseApplication
+import androidx.lifecycle.LiveData
 import ar.edu.unq.pdes.myprivateblog.data.BlogEntriesRepository
 import ar.edu.unq.pdes.myprivateblog.data.BlogEntry
 import ar.edu.unq.pdes.myprivateblog.data.EntityID
 import ar.edu.unq.pdes.myprivateblog.rx.RxSchedulers
-import ar.edu.unq.pdes.myprivateblog.screens.post_create.PostCreateViewModel
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -29,6 +28,38 @@ class BlogEntriesService @Inject constructor(
         }.compose(RxSchedulers.flowableAsync())
 
     }
+
+    fun updateBlogEntry(id: EntityID,bodyPath : String, title: String, body: String, cardColor: Int): Flowable<String>? {
+        return Flowable.fromCallable {
+
+            updateFileWithBody(bodyPath, body)
+
+        }.flatMapSingle {
+            updateBlogEntryB(id, title, it, cardColor)
+        }.compose(RxSchedulers.flowableAsync())
+    }
+
+    private fun updateBlogEntryB(id: EntityID, title: String, bodyPath: String, cardColor: Int): Single<String> {
+
+        return blogEntriesRepository.updateBlogEntry(
+            BlogEntry(
+                uid = id,
+                title = title,
+                bodyPath = bodyPath,
+                cardColor = cardColor
+            )
+        ).toSingle{bodyPath}
+    }
+
+    private fun updateFileWithBody(bodyPath: String, body: String): String {
+        val outputStreamWriter =
+            OutputStreamWriter(context.openFileOutput(bodyPath, Context.MODE_PRIVATE))
+
+        outputStreamWriter.use { it.flush(); it.write(body) }
+
+        return bodyPath
+    }
+
 
     private fun saveBlogEntry(
         title: String,
@@ -60,6 +91,10 @@ class BlogEntriesService @Inject constructor(
     fun deleteBlogEntry(blogEntry: BlogEntry): Completable {
         return blogEntriesRepository.deleteBlogEntry(blogEntry)
             .compose(RxSchedulers.completableAsync())
+    }
+
+    fun getAllBlogEntries(): LiveData<List<BlogEntry>> {
+        return blogEntriesRepository.getAllBlogEntries()
     }
 
 
