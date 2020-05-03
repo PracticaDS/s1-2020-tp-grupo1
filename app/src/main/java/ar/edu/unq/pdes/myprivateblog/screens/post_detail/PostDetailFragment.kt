@@ -59,9 +59,7 @@ class PostDetailFragment : BaseFragment() {
         body.settings.setAppCacheEnabled(true)
         body.settings.cacheMode = WebSettings.LOAD_DEFAULT
         body.webViewClient = WebViewClient()
-        if (post.bodyPath != null && context != null) {
-            val content = File(context?.filesDir, post.bodyPath).readText()
-            body.loadData(content, "text/html", "UTF-8")
-        }
+        val content = viewModel.getBody(post)
+        body.loadData(content, "text/html", "UTF-8")
     }
 }

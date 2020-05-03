@@ -33,4 +33,8 @@ class PostDetailViewModel @Inject constructor(
             }
 
     }
+
+    fun getBody(post: BlogEntry): String {
+        return blogEntriesService.getBody(post)
+    }
 }
