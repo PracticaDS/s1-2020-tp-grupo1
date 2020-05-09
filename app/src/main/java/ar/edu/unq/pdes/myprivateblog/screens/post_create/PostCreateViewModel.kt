@@ -26,7 +26,7 @@ open class PostCreateViewModel @Inject constructor(
     var postId: Int = 0
 
     fun createPost() {
-        // TODO: extract this to some BlogEntryService or BlogEntryActions or some other super meaningful name...
+
         val disposable=blogEntriesService.createBlogEntry(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
             .subscribe {
                 postId = it.toInt()
