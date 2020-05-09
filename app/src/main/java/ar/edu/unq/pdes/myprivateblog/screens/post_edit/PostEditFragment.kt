@@ -44,7 +44,4 @@ class PostEditFragment : PostCreateFragment() {
         findNavController().navigateUp()
     }
 
-    override fun onError(view:View){
-        // TODO: { Mostrar un mensaje de error y arreglar el estado. }
-    }
 }
