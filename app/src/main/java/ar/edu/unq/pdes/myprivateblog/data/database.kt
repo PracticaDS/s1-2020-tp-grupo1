@@ -39,7 +39,7 @@ data class BlogEntry(
     val title: String = "",
 
     @ColumnInfo(name = "bodyPath")
-    val bodyPath: String? = null,
+    val bodyPath: String,
 
     @ColumnInfo(name = "imagePath")
     val imagePath: String? = null,

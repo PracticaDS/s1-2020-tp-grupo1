@@ -32,6 +32,9 @@ class PostDetailFragment : BaseFragment() {
                 renderBlogEntry(it)
             }
         })
+        viewModel.body.observe(viewLifecycleOwner, Observer {
+            renderBody(it)
+        })
 
         btn_back.setOnClickListener {
             findNavController().navigateUp()
@@ -48,20 +51,18 @@ class PostDetailFragment : BaseFragment() {
 
     }
 
-    fun renderBlogEntry(post: BlogEntry) {
-        title.text = post.title
-
-        header_background.setBackgroundColor(post.cardColor)
-        applyStatusBarStyle(post.cardColor)
-        title.setTextColor(ColorUtils.findTextColorGivenBackgroundColor(post.cardColor))
-
+    private fun renderBody(bodyText: String) {
         body.settings.javaScriptEnabled = true
         body.settings.setAppCacheEnabled(true)
         body.settings.cacheMode = WebSettings.LOAD_DEFAULT
         body.webViewClient = WebViewClient()
-        if (post.bodyPath != null && context != null) {
-            val content = File(context?.filesDir, post.bodyPath).readText()
-            body.loadData(content, "text/html", "UTF-8")
-        }
+        body.loadData(bodyText, "text/html", "UTF-8")
+    }
+
+    fun renderBlogEntry(post: BlogEntry) {
+        title.text = post.title
+        header_background.setBackgroundColor(post.cardColor)
+        applyStatusBarStyle(post.cardColor)
+        title.setTextColor(ColorUtils.findTextColorGivenBackgroundColor(post.cardColor))
     }
 }
