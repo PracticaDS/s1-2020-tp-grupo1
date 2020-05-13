@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "625605755427",
+    "firebase_url": "https://to-do-app-9e2de.firebaseio.com",
+    "project_id": "to-do-app-9e2de",
+    "storage_bucket": "to-do-app-9e2de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625605755427:android:000979b7001bd283992796",
+        "android_client_info": {
+          "package_name": "ar.edu.unq.pdes.myprivateblog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625605755427-haqsll5cvbafcjd2qj8dn56go8sh303k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmI0OfRSFymS8L-vNDBGi_tmnFdANj1fI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "625605755427-haqsll5cvbafcjd2qj8dn56go8sh303k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
