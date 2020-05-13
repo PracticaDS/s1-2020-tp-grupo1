@@ -31,9 +31,11 @@ class PostEditViewModel @Inject constructor(
 
     fun savePost() {
         val disposable = blogEntriesService.updateBlogEntry(post.value!!.uid, post.value!!.bodyPath!!, titleText.value.toString(), bodyText.value!!, cardColor.value!!)
-            ?.subscribe {
+            ?.subscribe({
                 state.value = State.SUCCESS
-            }
+            }, {
+                state.value=State.ERROR
+            })
     }
 
     fun getBody(blogEntry: BlogEntry): String {

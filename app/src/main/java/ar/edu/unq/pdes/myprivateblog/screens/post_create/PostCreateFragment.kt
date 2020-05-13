@@ -1,5 +1,6 @@
 package ar.edu.unq.pdes.myprivateblog.screens.post_create
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doOnTextChanged
@@ -9,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import ar.edu.unq.pdes.myprivateblog.BaseFragment
 import ar.edu.unq.pdes.myprivateblog.ColorUtils
 import ar.edu.unq.pdes.myprivateblog.R
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_post_edit.*
 import org.wordpress.aztec.Aztec
@@ -139,7 +141,15 @@ open class PostCreateFragment : BaseFragment() {
     }
 
     protected open fun onError(view:View){
-        // TODO: manage error states
+        val snackbar: Snackbar = Snackbar.make(
+            view,
+            getString(R.string.PostEditError),
+            Snackbar.LENGTH_LONG
+        )
+        val snackbarView: View = snackbar.view
+        snackbarView.setBackgroundColor(Color.parseColor("#bf0000"))
+        snackbar.show()
+        viewModel.errorHandled()
     }
 
     private fun closeAndGoBack() {
