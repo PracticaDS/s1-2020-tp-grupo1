@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="ar.edu.unq.pdes.myprivateblog.SignInFragment"
+        android:name="ar.edu.unq.pdes.myprivateblog.screens.sign_in.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action
