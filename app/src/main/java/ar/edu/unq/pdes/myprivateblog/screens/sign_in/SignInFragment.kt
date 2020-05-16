@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import ar.edu.unq.pdes.myprivateblog.BaseFragment
 import ar.edu.unq.pdes.myprivateblog.R
 import com.firebase.ui.auth.AuthUI
@@ -18,7 +19,6 @@ class SignInFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         val auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
@@ -36,25 +36,27 @@ class SignInFragment : BaseFragment() {
                 .build(),
             RC_SIGN_IN
         )
+    }
 
-        fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            super.onActivityResult(requestCode, resultCode, data)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-            if (requestCode == RC_SIGN_IN) {
-                val response = IdpResponse.fromResultIntent(data)
-                if (resultCode == Activity.RESULT_OK) {
-                    // Successfully signed in
-                    val user = FirebaseAuth.getInstance().currentUser
-                    //pasar al otro layout
-                } else {
-                    // Sign in failed. If response is null the user canceled the
-                    // sign-in flow using the back button. Otherwise check
-                    // response.getError().getErrorCode() and handle the error.
-                    // ...
-                }
+        if (requestCode == RC_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+            if (resultCode == Activity.RESULT_OK) {
+                // Successfully signed in
+                val user = FirebaseAuth.getInstance().currentUser
+                navigateToBlogEntriesList()
+            } else {
+                // Sign in failed. If response is null the user canceled the
+                // sign-in flow using the back button. Otherwise check
+                // response.getError().getErrorCode() and handle the error.
+                // ...
             }
         }
+    }
 
-
+    private fun navigateToBlogEntriesList() {
+        findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToPostsListingFragment())
     }
 }
