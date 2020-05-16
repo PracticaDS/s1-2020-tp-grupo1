@@ -78,6 +78,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$androidXNavigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$androidXNavigationVersion"
 
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
 
     implementation 'com.google.android.material:material:1.2.0-alpha05'
@@ -105,12 +106,12 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
-    api ('com.github.wordpress-mobile.WordPress-Aztec-Android:aztec:v1.3.39')
-    api ('com.github.wordpress-mobile.WordPress-Aztec-Android:glide-loader:v1.3.39')
+    api('com.github.wordpress-mobile.WordPress-Aztec-Android:aztec:v1.3.39')
+    api('com.github.wordpress-mobile.WordPress-Aztec-Android:glide-loader:v1.3.39')
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
- 
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
