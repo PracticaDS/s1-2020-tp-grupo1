@@ -3,4 +3,5 @@
     <string name="hint_post_title">My Post Title</string>
     <string name="PostEditSuccess">Post editado.</string>
     <string name="create_post_message">Empezá a tomar tus notas</string>
+    <string name="PostEditError">Algo salió mal. Intentelo más tarde.</string>
 </resources>

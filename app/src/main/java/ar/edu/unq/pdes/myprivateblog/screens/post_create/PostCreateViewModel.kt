@@ -27,11 +27,16 @@ open class PostCreateViewModel @Inject constructor(
 
     fun createPost() {
 
-        val disposable=blogEntriesService.createBlogEntry(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
-            .subscribe {
+        val disposable = blogEntriesService.createBlogEntry(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
+            .subscribe({
                 postId = it.toInt()
-                state.value = PostCreateViewModel.State.SUCCESS
-            }
+                state.value = State.SUCCESS
+            }, {
+                state.value=State.ERROR
+            })
+    }
+    fun errorHandled() {
+        state.value = State.EDITING
     }
 
 }
