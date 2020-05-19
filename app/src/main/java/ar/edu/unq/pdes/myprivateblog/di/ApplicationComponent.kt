@@ -15,6 +15,8 @@ import ar.edu.unq.pdes.myprivateblog.screens.post_edit.PostEditFragment
 import ar.edu.unq.pdes.myprivateblog.screens.post_edit.PostEditViewModel
 import ar.edu.unq.pdes.myprivateblog.screens.posts_listing.PostsListingFragment
 import ar.edu.unq.pdes.myprivateblog.screens.posts_listing.PostsListingViewModel
+import ar.edu.unq.pdes.myprivateblog.screens.sign_in.SignInFragment
+import ar.edu.unq.pdes.myprivateblog.screens.sign_in.SignInViewModel
 import ar.edu.unq.pdes.myprivateblog.services.BlogEntriesService
 import dagger.*
 import dagger.android.AndroidInjector
@@ -62,6 +64,7 @@ open class ApplicationModule {
 
 @Module(
     includes = [
+        SignInModule::class,
         PostsListingModule::class,
         PostDetailModule::class,
         PostEditModule::class,
@@ -109,6 +112,22 @@ abstract class PostDetailModule {
     @IntoMap
     @ViewModelKey(PostDetailViewModel::class)
     abstract fun bindViewModel(viewmodel: PostDetailViewModel): ViewModel
+}
+
+@Module
+abstract class SignInModule {
+
+    @ContributesAndroidInjector(
+        modules = [
+            ViewModelBuilder::class
+        ]
+    )
+    internal abstract fun signInFragment(): SignInFragment
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SignInViewModel::class)
+    abstract fun bindViewModel(viewmodel: SignInViewModel): ViewModel
 }
 
 @Module
