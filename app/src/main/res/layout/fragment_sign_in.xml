@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.sign_in.SignInFragment">
+    tools:context="ar.edu.unq.pdes.grupo1.myprivateblog.screens.sign_in.SignInFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

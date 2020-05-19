@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/postsListingFragment"
-        android:name="ar.edu.unq.pdes.myprivateblog.screens.posts_listing.PostsListingFragment"
+        android:name="ar.edu.unq.pdes.grupo1.myprivateblog.screens.posts_listing.PostsListingFragment"
         android:label="PostsListingFragment"
         tools:layout="@layout/fragment_posts_listing">
         <action
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/postEditFragment"
-        android:name="ar.edu.unq.pdes.myprivateblog.screens.post_edit.PostEditFragment"
+        android:name="ar.edu.unq.pdes.grupo1.myprivateblog.screens.post_edit.PostEditFragment"
         android:label="PostEditFragment"
         tools:layout="@layout/fragment_post_edit" >
         <argument
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/postDetailFragment"
-        android:name="ar.edu.unq.pdes.myprivateblog.screens.post_detail.PostDetailFragment"
+        android:name="ar.edu.unq.pdes.grupo1.myprivateblog.screens.post_detail.PostDetailFragment"
         android:label="PostDetailFragment"
         tools:layout="@layout/fragment_post_detail">
         <action
@@ -47,7 +47,7 @@
 
     <fragment
         android:id="@+id/postCreateFragment"
-        android:name="ar.edu.unq.pdes.myprivateblog.screens.post_create.PostCreateFragment"
+        android:name="ar.edu.unq.pdes.grupo1.myprivateblog.screens.post_create.PostCreateFragment"
         android:label="PostCreateFragment"
         tools:layout="@layout/fragment_post_edit">
 
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="ar.edu.unq.pdes.myprivateblog.screens.sign_in.SignInFragment"
+        android:name="ar.edu.unq.pdes.grupo1.myprivateblog.screens.sign_in.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action

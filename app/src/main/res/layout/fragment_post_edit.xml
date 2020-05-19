@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_close"
         app:layout_constraintWidth_min="120dp" />
 
-    <ar.edu.unq.pdes.myprivateblog.widgets.ColorPicker
+    <ar.edu.unq.pdes.grupo1.myprivateblog.widgets.ColorPicker
         android:id="@+id/color_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

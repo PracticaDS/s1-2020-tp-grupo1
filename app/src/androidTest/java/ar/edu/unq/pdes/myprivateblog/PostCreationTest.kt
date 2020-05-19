@@ -1,4 +1,4 @@
-package ar.edu.unq.pdes.myprivateblog
+package ar.edu.unq.pdes.grupo1.myprivateblog
 
 import android.graphics.Color
 import androidx.test.espresso.Espresso.onView
@@ -11,6 +11,7 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import ar.edu.unq.pdes.grupo1.myprivateblog.MainActivity
 import it.xabaras.android.espresso.recyclerviewchildactions.RecyclerViewChildActions.Companion.childOfViewAtPositionWithMatcher
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Rule

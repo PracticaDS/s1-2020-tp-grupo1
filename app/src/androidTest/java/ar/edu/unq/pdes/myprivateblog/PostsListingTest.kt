@@ -1,13 +1,10 @@
-package ar.edu.unq.pdes.myprivateblog
+package ar.edu.unq.pdes.grupo1.myprivateblog
 
 import android.graphics.Color
-import android.view.View
-import android.webkit.WebView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.sugar.Web.onWebView
@@ -17,15 +14,11 @@ import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import kotlinx.coroutines.runBlocking
+import ar.edu.unq.pdes.grupo1.myprivateblog.MainActivity
 import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.Description
-import org.hamcrest.Matcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 @RunWith(AndroidJUnit4::class)

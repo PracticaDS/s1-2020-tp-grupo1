@@ -1,4 +1,4 @@
-package ar.edu.unq.pdes.myprivateblog
+package ar.edu.unq.pdes.grupo1.myprivateblog
 
 import android.graphics.drawable.ColorDrawable
 import android.view.View

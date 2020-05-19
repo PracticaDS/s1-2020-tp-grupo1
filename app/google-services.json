@@ -8,12 +8,65 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:625605755427:android:000979b7001bd283992796",
+        "mobilesdk_app_id": "1:625605755427:android:e0820d634373bf45992796",
         "android_client_info": {
-          "package_name": "ar.edu.unq.pdes.myprivateblog"
+          "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "625605755427-haqsll5cvbafcjd2qj8dn56go8sh303k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmI0OfRSFymS8L-vNDBGi_tmnFdANj1fI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "625605755427-haqsll5cvbafcjd2qj8dn56go8sh303k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625605755427:android:000979b7001bd283992796",
+        "android_client_info": {
+          "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625605755427-ltiigd8vt3npfpdl7ckmho0t4i1muro5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog",
+            "certificate_hash": "69d6a5a7b4cb43a015e07117da3c5c683aff5bb8"
+          }
+        },
+        {
+          "client_id": "625605755427-jt37prr47aoq38qaq6lubed33shsomaa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog",
+            "certificate_hash": "c5e4a39349649da85a2025c48ff64229da01f675"
+          }
+        },
+        {
+          "client_id": "625605755427-9m68v2no7qqb180blhpgf4hp9bdv75ui.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog",
+            "certificate_hash": "9791e45471ff436e4a5cc0d56fb9f8c774b59293"
+          }
+        },
         {
           "client_id": "625605755427-haqsll5cvbafcjd2qj8dn56go8sh303k.apps.googleusercontent.com",
           "client_type": 3
