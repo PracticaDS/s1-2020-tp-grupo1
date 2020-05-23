@@ -10,6 +10,8 @@ import ar.edu.unq.pdes.grupo1.myprivateblog.R
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 class SignInFragment : BaseFragment() {
     override val layoutId: Int
@@ -44,6 +46,13 @@ class SignInFragment : BaseFragment() {
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
+
+                // Write a message to the database
+                val database = Firebase.database
+                val myRef = database.getReference("message")
+
+                myRef.setValue("Hello, World!")
+
                 // Successfully signed in
                 val user = FirebaseAuth.getInstance().currentUser
                 navigateToBlogEntriesList()
