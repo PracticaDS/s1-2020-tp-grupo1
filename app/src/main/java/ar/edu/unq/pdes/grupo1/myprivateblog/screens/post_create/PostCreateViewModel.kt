@@ -29,14 +29,10 @@ open class PostCreateViewModel @Inject constructor(
 
     fun createPost() {
 
-        val data: MutableMap<String, Any> = HashMap()
-        data.set("uid", FirebaseAuth.getInstance().currentUser?.uid.toString())
-        data.set("pepita", "Hellow world")
+        val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
         // Write a message to the database
         val database = Firebase.database
-        val myRef = database.getReference("messages")
-
-        myRef.setValue(data)
+         database.getReference("messages/$uid").setValue("Falopa")
 
         val disposable = blogEntriesService.createBlogEntry(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
             .subscribe({
