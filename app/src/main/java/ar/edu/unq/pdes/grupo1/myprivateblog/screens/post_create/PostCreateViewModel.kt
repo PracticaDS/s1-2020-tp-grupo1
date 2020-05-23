@@ -5,6 +5,9 @@ import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ar.edu.unq.pdes.grupo1.myprivateblog.services.BlogEntriesService
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 
 
@@ -25,6 +28,15 @@ open class PostCreateViewModel @Inject constructor(
     var postId: Int = 0
 
     fun createPost() {
+
+        val data: MutableMap<String, Any> = HashMap()
+        data.set("uid", FirebaseAuth.getInstance().currentUser?.uid.toString())
+        data.set("pepita", "Hellow world")
+        // Write a message to the database
+        val database = Firebase.database
+        val myRef = database.getReference("messages")
+
+        myRef.setValue(data)
 
         val disposable = blogEntriesService.createBlogEntry(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
             .subscribe({
