@@ -39,7 +39,12 @@ open class PostCreateViewModel @Inject constructor(
             .subscribe({
 
                 val blog = Blog(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
-                database.getReference("messages/$uid").push().setValue(blog)
+                database.getReference("messages/$uid/$it").setValue(mapOf(
+                    "postId" to it,
+                    "title" to titleText.value.toString(),
+                    "body" to bodyText.value.toString(),
+                    "color" to cardColor.value!!
+                ))
                 postId = it.toInt()
                 state.value =
                     State.SUCCESS
