@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ar.edu.unq.pdes.grupo1.myprivateblog.services.BlogEntriesService
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
@@ -32,10 +34,12 @@ open class PostCreateViewModel @Inject constructor(
         val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
         // Write a message to the database
         val database = Firebase.database
-         database.getReference("messages/$uid").setValue("Falopa")
 
         val disposable = blogEntriesService.createBlogEntry(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
             .subscribe({
+
+                val blog = Blog(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
+                database.getReference("messages/$uid").push().setValue(blog)
                 postId = it.toInt()
                 state.value =
                     State.SUCCESS
@@ -50,3 +54,5 @@ open class PostCreateViewModel @Inject constructor(
     }
 
 }
+
+data class Blog(var title: String?, var body: String?, var cardColor: Int)
