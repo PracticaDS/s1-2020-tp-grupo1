@@ -61,6 +61,14 @@ class BlogEntriesService @Inject constructor(
         ).toSingle{bodyPath}
     }
 
+    private fun updateBlogEntryC(id: EntityID, bodyPath : String, title: String, body: String, cardColor: Int) : Flowable<String>?{
+        return Flowable.fromCallable {
+            updateFileWithBody(bodyPath, body)
+        }.flatMapSingle {
+            updateBlogEntryB(id, title, it, cardColor)
+        }.compose(RxSchedulers.flowableAsync())
+    }
+
     private fun updateFileWithBody(bodyPath: String, body: String): String {
         val outputStreamWriter =
             OutputStreamWriter(context.openFileOutput(bodyPath, Context.MODE_PRIVATE))
@@ -105,7 +113,8 @@ class BlogEntriesService @Inject constructor(
 
     fun getAllBlogEntries(): LiveData<List<BlogEntry>> {
         syncBlogEntriesFromFirebase()
-        return blogEntriesRepository.getAllBlogEntries()
+        val blogEntries = blogEntriesRepository.getAllBlogEntries()
+        return blogEntries
     }
 
     fun getBody(blogEntry: BlogEntry): String {
@@ -132,8 +141,11 @@ class BlogEntriesService @Inject constructor(
             val title = it["title"] as String
             val body = it["body"] as String
             val bodyPath = it["bodyPath"] as String
-            val cardColor = it["color"] as Int
-            updateBlogEntry(postId.toInt(), bodyPath, title, body, cardColor)
+            val cardColor = it["color"] as Long
+            updateBlogEntryC(postId.toInt(), bodyPath, title, body, cardColor.toInt())
+                ?.subscribe{
+                    it
+                }
         }
     }
 
