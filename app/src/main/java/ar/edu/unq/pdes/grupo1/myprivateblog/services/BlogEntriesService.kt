@@ -12,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.internal.operators.single.SingleJust
 import java.io.File
 import java.io.OutputStreamWriter
 import java.util.*
@@ -22,26 +23,23 @@ class BlogEntriesService @Inject constructor(
     val context: Context){
     fun createBlogEntry(title: String, body: String, cardColor: Int): Flowable<Long> {
         return Flowable.fromCallable {
-
             createFileWithContent(body)
-
         }.flatMapSingle {
-            val postId = saveBlogEntry(title, it, cardColor)
-            saveBlogEntryToFirebase(postId.blockingGet().toInt(), title, body, cardColor)
-            postId
+            saveBlogEntry(title, it, cardColor)
+        }.flatMapSingle {
+            saveBlogEntryToFirebase(it.toInt(), title, body, cardColor)
+            SingleJust(it)
         }.compose(RxSchedulers.flowableAsync())
-
     }
 
     fun updateBlogEntry(id: EntityID, bodyPath : String, title: String, body: String, cardColor: Int): Flowable<String>? {
         return Flowable.fromCallable {
-
             updateFileWithBody(bodyPath, body)
-
         }.flatMapSingle {
-            val newBodyPath = updateBlogEntryB(id, title, it, cardColor)
+            updateBlogEntryB(id, title, it, cardColor)
+        }.flatMapSingle {
             saveBlogEntryToFirebase(id, title, body, cardColor)
-            newBodyPath
+            SingleJust(it)
         }.compose(RxSchedulers.flowableAsync())
     }
 
