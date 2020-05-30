@@ -6,6 +6,9 @@ import ar.edu.unq.pdes.grupo1.myprivateblog.data.BlogEntriesRepository
 import ar.edu.unq.pdes.grupo1.myprivateblog.data.BlogEntry
 import ar.edu.unq.pdes.grupo1.myprivateblog.data.EntityID
 import ar.edu.unq.pdes.grupo1.myprivateblog.rx.RxSchedulers
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -23,9 +26,9 @@ class BlogEntriesService @Inject constructor(
             createFileWithContent(body)
 
         }.flatMapSingle {
-
-            saveBlogEntry(title, it, cardColor)
-
+            val postId = saveBlogEntry(title, it, cardColor)
+            saveBlogEntryToFirebase(postId.blockingGet().toInt(), title, body, cardColor)
+            postId
         }.compose(RxSchedulers.flowableAsync())
 
     }
@@ -36,7 +39,9 @@ class BlogEntriesService @Inject constructor(
             updateFileWithBody(bodyPath, body)
 
         }.flatMapSingle {
-            updateBlogEntryB(id, title, it, cardColor)
+            val newBodyPath = updateBlogEntryB(id, title, it, cardColor)
+            saveBlogEntryToFirebase(id, title, body, cardColor)
+            newBodyPath
         }.compose(RxSchedulers.flowableAsync())
     }
 
@@ -102,4 +107,16 @@ class BlogEntriesService @Inject constructor(
         return File(context.filesDir, blogEntry.bodyPath).readText()
     }
 
+    fun saveBlogEntryToFirebase(postId: Int, title: String, body: String, color: Int): Unit {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        // Write a message to the database
+        val database = Firebase.database
+
+        database.getReference("blogEntries/$uid/$postId").setValue(mapOf(
+            "postId" to postId,
+            "title" to title,
+            "body" to body,
+            "color" to color
+        ))
+    }
 }
