@@ -147,8 +147,8 @@ class BlogEntriesService @Inject constructor(
         )
     }
 
-    private fun onBlogEntriesReceivedFromFirebase(blogEntries: HashMap<String, HashMap<String, Any>>): Unit {
-        blogEntries.values.map {
+    private fun onBlogEntriesReceivedFromFirebase(blogEntries: List<HashMap<String, Any>>): Unit {
+        blogEntries.map {
             val postId = it["postId"] as Long
             val title = it["title"] as String
             val body = it["body"] as String
@@ -185,8 +185,14 @@ class BlogEntriesService @Inject constructor(
 
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                dataSnapshot.getValue<HashMap<String, HashMap<String, Any>>>()?.let {
-                    onBlogEntriesReceivedFromFirebase(it)
+                dataSnapshot.getValue<Any>()?.let {
+                    when (it) { //List<HashMap<String, Any>>
+                        is Map<*, *> -> onBlogEntriesReceivedFromFirebase(it.values.toList() as List<HashMap<String, Any>>)
+                        is List<*> -> onBlogEntriesReceivedFromFirebase(it as List<HashMap<String, Any>>)
+                        is Any -> return
+                    }
+
+
                 }
             }
 
