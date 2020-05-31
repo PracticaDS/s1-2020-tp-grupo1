@@ -26,7 +26,8 @@ import kotlin.collections.HashMap
 
 class BlogEntriesService @Inject constructor(
     val blogEntriesRepository: BlogEntriesRepository,
-    val context: Context){
+    val context: Context
+) {
     fun createBlogEntry(title: String, body: String, cardColor: Int): Flowable<EntityID> {
         return Flowable.fromCallable {
             createFileWithContent(body)
@@ -38,7 +39,13 @@ class BlogEntriesService @Inject constructor(
         }.compose(RxSchedulers.flowableAsync())
     }
 
-    fun updateBlogEntry(id: EntityID, bodyPath : String, title: String, body: String, cardColor: Int): Flowable<String>? {
+    fun updateBlogEntry(
+        id: EntityID,
+        bodyPath: String,
+        title: String,
+        body: String,
+        cardColor: Int
+    ): Flowable<String>? {
         return Flowable.fromCallable {
             updateFileWithBody(bodyPath, body)
         }.flatMapSingle {
@@ -49,7 +56,12 @@ class BlogEntriesService @Inject constructor(
         }.compose(RxSchedulers.flowableAsync())
     }
 
-    private fun updateBlogEntryB(id: EntityID, title: String, bodyPath: String, cardColor: Int): Single<String> {
+    private fun updateBlogEntryB(
+        id: EntityID,
+        title: String,
+        bodyPath: String,
+        cardColor: Int
+    ): Single<String> {
 
         return blogEntriesRepository.updateBlogEntry(
             BlogEntry(
@@ -58,15 +70,7 @@ class BlogEntriesService @Inject constructor(
                 bodyPath = bodyPath,
                 cardColor = cardColor
             )
-        ).toSingle{bodyPath}
-    }
-
-    private fun updateBlogEntryC(id: EntityID, bodyPath : String, title: String, body: String, cardColor: Int) : Flowable<String>?{
-        return Flowable.fromCallable {
-            updateFileWithBody(bodyPath, body)
-        }.flatMapSingle {
-            updateBlogEntryB(id, title, it, cardColor)
-        }.compose(RxSchedulers.flowableAsync())
+        ).toSingle { bodyPath }
     }
 
     private fun updateFileWithBody(bodyPath: String, body: String): String {
@@ -101,7 +105,7 @@ class BlogEntriesService @Inject constructor(
         return fileName
     }
 
-    fun fetchBlogEntry(id: EntityID):Flowable<BlogEntry>{
+    fun fetchBlogEntry(id: EntityID): Flowable<BlogEntry> {
         return blogEntriesRepository.fetchById(id)
             .compose(RxSchedulers.flowableAsync())
     }
@@ -121,32 +125,58 @@ class BlogEntriesService @Inject constructor(
         return File(context.filesDir, blogEntry.bodyPath).readText()
     }
 
-    private fun saveBlogEntryToFirebase(postId: Int, title: String, body: String, bodyPath: String, color: Int): Unit {
+    private fun saveBlogEntryToFirebase(
+        postId: Int,
+        title: String,
+        body: String,
+        bodyPath: String,
+        color: Int
+    ): Unit {
         val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
         // Write a message to the database
         val database = Firebase.database
 
-        database.getReference("blogEntries/$uid/$postId").setValue(mapOf(
-            "postId" to postId,
-            "title" to title,
-            "body" to body,
-            "bodyPath" to bodyPath,
-            "color" to color
-        ))
+        database.getReference("blogEntries/$uid/$postId").setValue(
+            mapOf(
+                "postId" to postId,
+                "title" to title,
+                "body" to body,
+                "bodyPath" to bodyPath,
+                "color" to color
+            )
+        )
     }
 
     private fun onBlogEntriesReceivedFromFirebase(blogEntries: HashMap<String, HashMap<String, Any>>): Unit {
-        blogEntries.values.forEach {
+        blogEntries.values.map {
             val postId = it["postId"] as Long
             val title = it["title"] as String
             val body = it["body"] as String
             val bodyPath = it["bodyPath"] as String
             val cardColor = it["color"] as Long
-            updateBlogEntryC(postId.toInt(), bodyPath, title, body, cardColor.toInt())
-                ?.subscribe{
-                    it
-                }
+
+            Pair(
+                BlogEntry(
+                    uid = postId.toInt(),
+                    title = title,
+                    bodyPath = bodyPath,
+                    cardColor = cardColor.toInt()
+                ), body
+            )
+        }.let {
+            updateOrCreate(it)
         }
+    }
+
+    private fun updateOrCreate(blogEntries: List<Pair<BlogEntry, String>>) {
+        blogEntries.forEach {
+            updateFileWithBody(it.first.bodyPath, it.second)
+        }
+        blogEntries.map {
+            it.first
+        }.let {
+            blogEntriesRepository.insertOrUpdate(it)
+        }.subscribe()
     }
 
     private fun syncBlogEntriesFromFirebase() {

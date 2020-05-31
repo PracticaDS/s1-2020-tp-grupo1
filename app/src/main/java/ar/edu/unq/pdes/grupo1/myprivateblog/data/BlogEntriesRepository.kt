@@ -35,4 +35,9 @@ class BlogEntriesRepository(val appDatabase: AppDatabase) {
             .delete(blogEntry)
             .subscribeOn(Schedulers.io())
 
+    fun insertOrUpdate(blogEntries: List<BlogEntry>) =
+        appDatabase.blogEntriesDao()
+            .insertOrUpdate(blogEntries)
+            .subscribeOn(Schedulers.io())
+
 }
