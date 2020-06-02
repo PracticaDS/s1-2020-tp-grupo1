@@ -9,6 +9,7 @@ import ar.edu.unq.pdes.grupo1.myprivateblog.rx.RxSchedulers
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
@@ -111,8 +112,17 @@ class BlogEntriesService @Inject constructor(
     }
 
     fun deleteBlogEntry(blogEntry: BlogEntry): Completable {
+        deleteBlogEntryFromFirebase(blogEntry)
         return blogEntriesRepository.deleteBlogEntry(blogEntry)
             .compose(RxSchedulers.completableAsync())
+    }
+
+    private fun deleteBlogEntryFromFirebase(blogEntry: BlogEntry) {
+        val database = Firebase.database
+        val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        val postId = blogEntry.uid
+        database.getReference("blogEntries/$uid/$postId").removeValue()
+
     }
 
     fun getAllBlogEntries(): LiveData<List<BlogEntry>> {
