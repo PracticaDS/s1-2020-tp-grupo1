@@ -198,7 +198,7 @@ class BlogEntriesService @Inject constructor(
                 dataSnapshot.getValue<Any>()?.let {
                     when (it) { //List<HashMap<String, Any>>
                         is Map<*, *> -> onBlogEntriesReceivedFromFirebase(it.values.toList() as List<HashMap<String, Any>>)
-                        is List<*> -> onBlogEntriesReceivedFromFirebase(it as List<HashMap<String, Any>>)
+                        is List<*> -> onBlogEntriesReceivedFromFirebase((it.subList(1,it.size)) as List<HashMap<String, Any>>)
                         is Any -> return
                     }
 
