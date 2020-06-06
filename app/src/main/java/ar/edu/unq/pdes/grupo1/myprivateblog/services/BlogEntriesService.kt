@@ -22,6 +22,9 @@ import timber.log.Timber
 import java.io.File
 import java.io.OutputStreamWriter
 import java.util.*
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
 import javax.inject.Inject
 import kotlin.collections.HashMap
 
@@ -150,7 +153,7 @@ class BlogEntriesService @Inject constructor(
             mapOf(
                 "postId" to postId,
                 "title" to title,
-                "body" to body,
+                "body" to encryptSomething(body),
                 "bodyPath" to bodyPath,
                 "color" to color
             )
@@ -212,5 +215,17 @@ class BlogEntriesService @Inject constructor(
         }
 
         database.getReference("blogEntries/$uid").addListenerForSingleValueEvent(postListener)
+    }
+
+    private fun encryptSomething(text : String): String {
+        val plaintext: ByteArray = text.toByteArray()
+        val keygen = KeyGenerator.getInstance("AES")
+        keygen.init(256)
+        val key: SecretKey = keygen.generateKey()
+        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
+        cipher.init(Cipher.ENCRYPT_MODE, key)
+        val ciphertext: ByteArray = cipher.doFinal(plaintext)
+        val iv: ByteArray = cipher.iv
+        return ciphertext.toString()
     }
 }
