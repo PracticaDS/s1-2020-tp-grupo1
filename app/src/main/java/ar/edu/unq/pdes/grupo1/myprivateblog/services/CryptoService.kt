@@ -33,7 +33,7 @@ class CryptoService {
     }
 
     @Throws(Exception::class)
-    fun decrypt(encrypted: String): String? {
+    fun decrypt(encrypted: String): String {
         val enc = toByte(encrypted)
         val result = decrypt(enc)
         return String(result)

@@ -148,12 +148,12 @@ class BlogEntriesService @Inject constructor(
         val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
         // Write a message to the database
         val database = Firebase.database
-
+        val cryptoService = CryptoService()
         database.getReference("blogEntries/$uid/$postId").setValue(
             mapOf(
                 "postId" to postId,
-                "title" to title,
-                "body" to encryptSomething(body),
+                "title" to cryptoService.encrypt(title),
+                "body" to cryptoService.encrypt(body),
                 "bodyPath" to bodyPath,
                 "color" to color
             )
@@ -167,14 +167,15 @@ class BlogEntriesService @Inject constructor(
             val body = it["body"] as String
             val bodyPath = it["bodyPath"] as String
             val cardColor = it["color"] as Long
+            val cryptoService = CryptoService()
 
             Pair(
                 BlogEntry(
                     uid = postId.toInt(),
-                    title = title,
+                    title = cryptoService.decrypt(title),
                     bodyPath = bodyPath,
                     cardColor = cardColor.toInt()
-                ), body
+                ), cryptoService.decrypt(body)
             )
         }.let {
             updateOrCreate(it)
@@ -215,17 +216,5 @@ class BlogEntriesService @Inject constructor(
         }
 
         database.getReference("blogEntries/$uid").addListenerForSingleValueEvent(postListener)
-    }
-
-    private fun encryptSomething(text : String): String {
-        val plaintext: ByteArray = text.toByteArray()
-        val keygen = KeyGenerator.getInstance("AES")
-        keygen.init(256)
-        val key: SecretKey = keygen.generateKey()
-        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
-        cipher.init(Cipher.ENCRYPT_MODE, key)
-        val ciphertext: ByteArray = cipher.doFinal(plaintext)
-        val iv: ByteArray = cipher.iv
-        return ciphertext.toString()
     }
 }

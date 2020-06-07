@@ -50,9 +50,9 @@ class ExampleUnitTest {
     }
 
     private fun encryptSomethingAndDecriptItB(text : String): String {
-        val criptoService : CryptoService= CryptoService()
-        val textEncriptado : String = criptoService.encrypt(text)!!
-        val textDesencriptado : String = criptoService.decrypt(textEncriptado!!)!!
+        val cryptoService = CryptoService()
+        val textEncriptado : String = cryptoService.encrypt(text)!!
+        val textDesencriptado : String = cryptoService.decrypt(textEncriptado!!)!!
         return textDesencriptado
     }
 
