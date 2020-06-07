@@ -1,21 +1,10 @@
-package ar.edu.unq.pdes.grupo1.myprivateblog
+package ar.edu.unq.pdes.grupo1.myprivateblog.services
 
-import ar.edu.unq.pdes.grupo1.myprivateblog.services.CryptoService
-import org.junit.Assert.assertEquals
-import org.junit.Test
 import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
-import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-import kotlin.experimental.and
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
+class CryptoService {
 
     private val keyValue = byteArrayOf(
         'c'.toByte(),
@@ -35,26 +24,6 @@ class ExampleUnitTest {
         'o'.toByte(),
         'm'.toByte()
     )
-
-
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
-    }
-
-    @Test
-    fun encryption_isCorrect(){
-        val textoOriginal : String = "texto sin encryptar"
-        val texto : String =encryptSomethingAndDecriptItB(textoOriginal)
-        assertEquals(textoOriginal, texto)
-    }
-
-    private fun encryptSomethingAndDecriptItB(text : String): String {
-        val criptoService : CryptoService= CryptoService()
-        val textEncriptado : String = criptoService.encrypt(text)!!
-        val textDesencriptado : String = criptoService.decrypt(textEncriptado!!)!!
-        return textDesencriptado
-    }
 
     @Throws(Exception::class)
     fun encrypt(cleartext: String): String? {
@@ -92,7 +61,7 @@ class ExampleUnitTest {
         return cipher.doFinal(encrypted)
     }
 
-    fun toByte(hexString: String): ByteArray {
+    private fun toByte(hexString: String): ByteArray {
         val len = hexString.length / 2
         val result = ByteArray(len)
         for (i in 0 until len) result[i] = Integer.valueOf(
@@ -102,7 +71,7 @@ class ExampleUnitTest {
         return result
     }
 
-    fun toHex(buf: ByteArray?): String? {
+    private fun toHex(buf: ByteArray?): String? {
         if (buf == null) return ""
         val result = StringBuffer(2 * buf.size)
         for (i in buf.indices) {
