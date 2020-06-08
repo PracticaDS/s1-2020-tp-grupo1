@@ -26,7 +26,7 @@ class CryptoService {
     )
 
     @Throws(Exception::class)
-    fun encrypt(cleartext: String): String? {
+    fun encrypt(cleartext: String): String {
         val rawKey = getRawKey()
         val result = encrypt(rawKey, cleartext.toByteArray())
         return toHex(result)
@@ -71,7 +71,7 @@ class CryptoService {
         return result
     }
 
-    private fun toHex(buf: ByteArray?): String? {
+    private fun toHex(buf: ByteArray?): String {
         if (buf == null) return ""
         val result = StringBuffer(2 * buf.size)
         for (i in buf.indices) {
