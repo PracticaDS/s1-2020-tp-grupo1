@@ -36,7 +36,7 @@ class BlogEntriesService @Inject constructor(
     fun createBlogEntry(title: String, body: String, cardColor: Int): Flowable<EntityID> {
         val cryptoService = CryptoService()
         return Flowable.fromCallable {
-            createFileWithContent(body)
+            createFileWithContent(cryptoService.encrypt(body))
         }.flatMapSingle {
             saveBlogEntry(cryptoService.encrypt(title), it, cardColor)
         }.flatMapSingle {
@@ -52,10 +52,11 @@ class BlogEntriesService @Inject constructor(
         body: String,
         cardColor: Int
     ): Flowable<String>? {
+        val cryptoService = CryptoService()
         return Flowable.fromCallable {
-            updateFileWithBody(bodyPath, body)
+            updateFileWithBody(bodyPath,cryptoService.encrypt(body))
         }.flatMapSingle {
-            updateBlogEntryB(id, title, it, cardColor)
+            updateBlogEntryB(id,cryptoService.encrypt(title), it, cardColor)
         }.flatMapSingle {
             saveBlogEntryToFirebase(id, title, body, bodyPath, cardColor)
             SingleJust(it)
@@ -148,7 +149,8 @@ class BlogEntriesService @Inject constructor(
     }
 
     fun getBody(blogEntry: BlogEntry): String {
-        return File(context.filesDir, blogEntry.bodyPath).readText()
+        val cryptoService = CryptoService()
+        return cryptoService.decrypt(File(context.filesDir, blogEntry.bodyPath).readText())
     }
 
     private fun saveBlogEntryToFirebase(
