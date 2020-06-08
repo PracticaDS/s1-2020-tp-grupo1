@@ -2,6 +2,7 @@ package ar.edu.unq.pdes.grupo1.myprivateblog.services
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import ar.edu.unq.pdes.grupo1.myprivateblog.data.BlogEntriesRepository
 import ar.edu.unq.pdes.grupo1.myprivateblog.data.BlogEntry
 import ar.edu.unq.pdes.grupo1.myprivateblog.data.EntityID
@@ -33,10 +34,11 @@ class BlogEntriesService @Inject constructor(
     val context: Context
 ) {
     fun createBlogEntry(title: String, body: String, cardColor: Int): Flowable<EntityID> {
+        val cryptoService = CryptoService()
         return Flowable.fromCallable {
             createFileWithContent(body)
         }.flatMapSingle {
-            saveBlogEntry(title, it, cardColor)
+            saveBlogEntry(cryptoService.encrypt(title), it, cardColor)
         }.flatMapSingle {
             saveBlogEntryToFirebase(it.uid.toInt(), it.title, body, it.bodyPath, it.cardColor)
             SingleJust(it.uid)
@@ -110,7 +112,12 @@ class BlogEntriesService @Inject constructor(
     }
 
     fun fetchBlogEntry(id: EntityID): Flowable<BlogEntry> {
-        return blogEntriesRepository.fetchById(id)
+        val cryptoService = CryptoService()
+        return blogEntriesRepository.fetchById(id).map { BlogEntry(
+            uid = it.uid,
+            title = cryptoService.decrypt(it.title),
+            bodyPath = it.bodyPath,
+            cardColor = it.cardColor) }
             .compose(RxSchedulers.flowableAsync())
     }
 
@@ -131,7 +138,13 @@ class BlogEntriesService @Inject constructor(
     fun getAllBlogEntries(): LiveData<List<BlogEntry>> {
         syncBlogEntriesFromFirebase()
         val blogEntries = blogEntriesRepository.getAllBlogEntries()
-        return blogEntries
+        val cryptoService = CryptoService()
+        return blogEntries.map { blogEntriesList ->
+            blogEntriesList.map { BlogEntry(
+            uid = it.uid,
+            title = cryptoService.decrypt(it.title),
+            bodyPath = it.bodyPath,
+            cardColor = it.cardColor) } }
     }
 
     fun getBody(blogEntry: BlogEntry): String {
