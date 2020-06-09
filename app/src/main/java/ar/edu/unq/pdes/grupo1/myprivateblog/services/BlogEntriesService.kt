@@ -10,7 +10,6 @@ import ar.edu.unq.pdes.grupo1.myprivateblog.rx.RxSchedulers
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
@@ -23,24 +22,24 @@ import timber.log.Timber
 import java.io.File
 import java.io.OutputStreamWriter
 import java.util.*
-import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
-import javax.crypto.SecretKey
 import javax.inject.Inject
 import kotlin.collections.HashMap
 
 class BlogEntriesService @Inject constructor(
     val blogEntriesRepository: BlogEntriesRepository,
-    val context: Context
+    val context: Context,
+    val cryptoService: CryptoService = CryptoService()
 ) {
+
     fun createBlogEntry(title: String, body: String, cardColor: Int): Flowable<EntityID> {
-        val cryptoService = CryptoService()
+        val encryptedTitle = cryptoService.encrypt(title)
+        val encryptedBody = cryptoService.encrypt(body)
         return Flowable.fromCallable {
-            createFileWithContent(cryptoService.encrypt(body))
+            createFileWithContent(encryptedBody)
         }.flatMapSingle {
-            saveBlogEntry(cryptoService.encrypt(title), it, cardColor)
+            saveBlogEntry(encryptedTitle, it, cardColor)
         }.flatMapSingle {
-            saveBlogEntryToFirebase(it.uid.toInt(), it.title, body, it.bodyPath, it.cardColor)
+            saveBlogEntryToFirebase(it.uid.toInt(), it.title, encryptedBody, it.bodyPath, it.cardColor)
             SingleJust(it.uid)
         }.compose(RxSchedulers.flowableAsync())
     }
@@ -52,13 +51,14 @@ class BlogEntriesService @Inject constructor(
         body: String,
         cardColor: Int
     ): Flowable<String>? {
-        val cryptoService = CryptoService()
+        val encryptedTitle = cryptoService.encrypt(title)
+        val encryptedBody = cryptoService.encrypt(body)
         return Flowable.fromCallable {
-            updateFileWithBody(bodyPath,cryptoService.encrypt(body))
+            updateFileWithBody(bodyPath,encryptedBody)
         }.flatMapSingle {
-            updateBlogEntryB(id,cryptoService.encrypt(title), it, cardColor)
+            updateBlogEntryB(id,encryptedTitle, it, cardColor)
         }.flatMapSingle {
-            saveBlogEntryToFirebase(id, title, body, bodyPath, cardColor)
+            saveBlogEntryToFirebase(id, encryptedTitle, encryptedBody, bodyPath, cardColor)
             SingleJust(it)
         }.compose(RxSchedulers.flowableAsync())
     }
@@ -113,13 +113,13 @@ class BlogEntriesService @Inject constructor(
     }
 
     fun fetchBlogEntry(id: EntityID): Flowable<BlogEntry> {
-        val cryptoService = CryptoService()
-        return blogEntriesRepository.fetchById(id).map { BlogEntry(
-            uid = it.uid,
-            title = cryptoService.decrypt(it.title),
-            bodyPath = it.bodyPath,
-            cardColor = it.cardColor) }
-            .compose(RxSchedulers.flowableAsync())
+        return blogEntriesRepository.fetchById(id).map{
+            BlogEntry(
+                uid=it.uid,
+                title = cryptoService.decrypt(it.title),
+                bodyPath = it.bodyPath,
+                cardColor = it.cardColor)
+        }.compose(RxSchedulers.flowableAsync())
     }
 
     fun deleteBlogEntry(blogEntry: BlogEntry): Completable {
@@ -138,18 +138,18 @@ class BlogEntriesService @Inject constructor(
 
     fun getAllBlogEntries(): LiveData<List<BlogEntry>> {
         syncBlogEntriesFromFirebase()
-        val blogEntries = blogEntriesRepository.getAllBlogEntries()
-        val cryptoService = CryptoService()
-        return blogEntries.map { blogEntriesList ->
-            blogEntriesList.map { BlogEntry(
-            uid = it.uid,
-            title = cryptoService.decrypt(it.title),
-            bodyPath = it.bodyPath,
-            cardColor = it.cardColor) } }
+        return blogEntriesRepository.getAllBlogEntries()
+            .map { blogEntriesList ->
+                blogEntriesList.map{
+                    BlogEntry(
+                        uid=it.uid,
+                        title = cryptoService.decrypt(it.title),
+                        bodyPath = it.bodyPath,
+                        cardColor = it.cardColor)
+                } }
     }
 
     fun getBody(blogEntry: BlogEntry): String {
-        val cryptoService = CryptoService()
         return cryptoService.decrypt(File(context.filesDir, blogEntry.bodyPath).readText())
     }
 
@@ -163,12 +163,11 @@ class BlogEntriesService @Inject constructor(
         val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
         // Write a message to the database
         val database = Firebase.database
-        val cryptoService = CryptoService()
         database.getReference("blogEntries/$uid/$postId").setValue(
             mapOf(
                 "postId" to postId,
-                "title" to cryptoService.encrypt(title),
-                "body" to cryptoService.encrypt(body),
+                "title" to title,
+                "body" to body,
                 "bodyPath" to bodyPath,
                 "color" to color
             )
@@ -182,15 +181,15 @@ class BlogEntriesService @Inject constructor(
             val body = it["body"] as String
             val bodyPath = it["bodyPath"] as String
             val cardColor = it["color"] as Long
-            val cryptoService = CryptoService()
+
 
             Pair(
                 BlogEntry(
                     uid = postId.toInt(),
-                    title = cryptoService.decrypt(title),
+                    title = title,
                     bodyPath = bodyPath,
                     cardColor = cardColor.toInt()
-                ), cryptoService.decrypt(body)
+                ), body
             )
         }.let {
             updateOrCreate(it)
