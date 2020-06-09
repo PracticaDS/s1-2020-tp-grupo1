@@ -28,7 +28,7 @@ import kotlin.collections.HashMap
 class BlogEntriesService @Inject constructor(
     val blogEntriesRepository: BlogEntriesRepository,
     val context: Context,
-    val cryptoService: CryptoService = CryptoService()
+    val cryptoService: CryptoService
 ) {
 
     fun createBlogEntry(title: String, body: String, cardColor: Int): Flowable<EntityID> {
