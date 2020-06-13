@@ -15,6 +15,8 @@ class CryptoService {
     private val keySpecAlgorithm: String = "AES"
     private val keyFactoryAlgorithm = "PBKDF2WithHmacSHA1"
     private val transformations: String = "AES/CBC/PKCS5Padding"
+    private val keySpecIterationCount = 65536
+    private val keySpecKeyLength = 256
 
     fun encrypt(input: String, password: String): String {
         val cipher = Cipher.getInstance(transformations)
@@ -22,10 +24,7 @@ class CryptoService {
         val salt = ByteArray(cipher.blockSize)
         SecureRandom().nextBytes(salt)
 
-        val factory: SecretKeyFactory = SecretKeyFactory.getInstance(keyFactoryAlgorithm)
-        val spec: KeySpec = PBEKeySpec(password.toCharArray(), salt, 65536, 256)
-        val tmp: SecretKey = factory.generateSecret(spec)
-        val secret = SecretKeySpec(tmp.encoded, keySpecAlgorithm)
+        val secret = getSecretKeySpec(password, salt)
 
         val iv = ByteArray(cipher.blockSize)
         SecureRandom().nextBytes(iv)
@@ -53,38 +52,24 @@ class CryptoService {
         val msg = ByteArray(encryptedByteArray.size - cipher.blockSize - cipher.blockSize)
         instream.read(msg)
 
-        val factory: SecretKeyFactory = SecretKeyFactory.getInstance(keyFactoryAlgorithm)
-        val spec: KeySpec = PBEKeySpec(password.toCharArray(), salt, 65536, 256)
-        val tmp: SecretKey = factory.generateSecret(spec)
-        val secret = SecretKeySpec(tmp.encoded, keySpecAlgorithm)
+        val secret = getSecretKeySpec(password, salt)
 
         cipher.init(Cipher.DECRYPT_MODE, secret, IvParameterSpec(iv))
         return cipher.doFinal(msg).toString()
     }
 
-    private fun toByte(hexString: String): ByteArray {
-        val len = hexString.length / 2
-        val result = ByteArray(len)
-        for (i in 0 until len) result[i] = Integer.valueOf(
-            hexString.substring(2 * i, 2 * i + 2),
-            16
-        ).toByte()
-        return result
-    }
-
-    private fun toHex(buf: ByteArray?): String {
-        if (buf == null) return ""
-        val result = StringBuffer(2 * buf.size)
-        for (i in buf.indices) {
-            appendHex(result, buf[i])
-        }
-        return result.toString()
-    }
-
-    private val HEX = "0123456789ABCDEF"
-
-    private fun appendHex(sb: StringBuffer, b: Byte) {
-        sb.append(HEX[(b.toInt() shr 4) and 0x0f]).append(HEX[0x0f.and(b.toInt())])
+    private fun getSecretKeySpec(
+        password: String,
+        salt: ByteArray
+    ): SecretKeySpec {
+        val spec: KeySpec = PBEKeySpec(
+            password.toCharArray(),
+            salt,
+            keySpecIterationCount,
+            keySpecKeyLength
+        )
+        val factory: SecretKeyFactory = SecretKeyFactory.getInstance(keyFactoryAlgorithm)
+        val secretKey: SecretKey = factory.generateSecret(spec)
+        return SecretKeySpec(secretKey.encoded, keySpecAlgorithm)
     }
 }
-
