@@ -15,6 +15,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "625605755427-909nou4s2e2qv6b07meth8lptb504622.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog",
+            "certificate_hash": "9791e45471ff436e4a5cc0d56fb9f8c774b59293"
+          }
+        },
+        {
+          "client_id": "625605755427-hqkqbhsnt86i4s11a9jfm666889lpsnc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog",
+            "certificate_hash": "a8f11200932fbb1b36c9207e67b03a964c433d20"
+          }
+        },
+        {
+          "client_id": "625605755427-7ktvfk83u65nu81di2h7u8amrnaiutpr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog",
+            "certificate_hash": "c5e4a39349649da85a2025c48ff64229da01f675"
+          }
+        },
+        {
           "client_id": "625605755427-haqsll5cvbafcjd2qj8dn56go8sh303k.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -39,7 +63,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:625605755427:android:000979b7001bd283992796",
         "android_client_info": {
-          "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog"
+          "package_name": "ar.edu.unq.pdes.myprivateblog"
         }
       },
       "oauth_client": [
@@ -47,7 +71,7 @@
           "client_id": "625605755427-ltiigd8vt3npfpdl7ckmho0t4i1muro5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog",
+            "package_name": "ar.edu.unq.pdes.myprivateblog",
             "certificate_hash": "69d6a5a7b4cb43a015e07117da3c5c683aff5bb8"
           }
         },
@@ -55,7 +79,7 @@
           "client_id": "625605755427-jt37prr47aoq38qaq6lubed33shsomaa.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog",
+            "package_name": "ar.edu.unq.pdes.myprivateblog",
             "certificate_hash": "c5e4a39349649da85a2025c48ff64229da01f675"
           }
         },
@@ -63,7 +87,7 @@
           "client_id": "625605755427-9m68v2no7qqb180blhpgf4hp9bdv75ui.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ar.edu.unq.pdes.grupo1.myprivateblog",
+            "package_name": "ar.edu.unq.pdes.myprivateblog",
             "certificate_hash": "9791e45471ff436e4a5cc0d56fb9f8c774b59293"
           }
         },
