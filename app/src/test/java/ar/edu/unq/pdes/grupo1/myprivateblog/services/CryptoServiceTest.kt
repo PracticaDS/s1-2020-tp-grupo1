@@ -4,6 +4,8 @@ package ar.edu.unq.pdes.grupo1.myprivateblog.services
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 
 class CryptoServiceTest {
 
@@ -26,17 +28,30 @@ class CryptoServiceTest {
         clearText = "super secret"
     }
 
+    @ExperimentalStdlibApi
     @Test
-    fun encriptingAndDecriptingAStringShouldReturnAnEqualSring() {
+    fun encriptingAndDecriptingAStringShouldReturnAnEqualString() {
+        val istream = ByteArrayInputStream(clearText.toByteArray())
+        val ostream = ByteArrayOutputStream()
+
+        criptoService.encrypt(istream, ostream)
+
+        val encripted = ostream.toByteArray()
+
+        val istream2 = ByteArrayInputStream(encripted)
+        val ostream2 = ByteArrayOutputStream()
+
+
+        criptoService.decrypt(
+            istream2,
+            ostream2
+        )
+
+        val decripted = ostream2.toByteArray()
+
         assertEquals(
-            criptoService.decrypt(
-                criptoService.encrypt(
-                    clearText,
-                    password
-                ),
-                password
-            ),
-            clearText
+            clearText,
+            decripted.decodeToString()
         )
     }
 }

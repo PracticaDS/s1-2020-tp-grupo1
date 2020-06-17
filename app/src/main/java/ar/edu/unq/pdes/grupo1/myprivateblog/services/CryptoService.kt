@@ -1,12 +1,12 @@
 package ar.edu.unq.pdes.grupo1.myprivateblog.services
 
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.security.SecureRandom
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import java.io.*
+import java.security.*
 import java.security.spec.KeySpec
-import javax.crypto.Cipher
-import javax.crypto.SecretKey
-import javax.crypto.SecretKeyFactory
+import java.util.stream.Stream
+import javax.crypto.*
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
@@ -17,45 +17,43 @@ class CryptoService {
     private val transformations: String = "AES/CBC/PKCS5Padding"
     private val keySpecIterationCount = 65536
     private val keySpecKeyLength = 256
+    private val password = "pepita"
 
-    fun encrypt(input: String, password: String): String {
+    fun encrypt(input: InputStream, os: OutputStream) {
         val cipher = Cipher.getInstance(transformations)
-
-        val salt = ByteArray(cipher.blockSize)
-        SecureRandom().nextBytes(salt)
-
-        val secret = getSecretKeySpec(password, salt)
 
         val iv = ByteArray(cipher.blockSize)
         SecureRandom().nextBytes(iv)
-        cipher.init(Cipher.ENCRYPT_MODE, secret, IvParameterSpec(iv))
-
-        val os = ByteArrayOutputStream()
         os.write(iv)
-        os.write(salt)
-        os.write(
-            cipher.doFinal(input.toByteArray())
-        )
-        return os.toString()
-    }
 
-    fun decrypt(encrypted: String, password: String): String {
-        val cipher = Cipher.getInstance(transformations)
-
-        val encryptedByteArray = encrypted.toByteArray()
-
-        val instream = ByteArrayInputStream(encryptedByteArray, 0, encryptedByteArray.size)
-        val iv = ByteArray(cipher.blockSize)
-        instream.read(iv)
         val salt = ByteArray(cipher.blockSize)
-        instream.read(salt)
-        val msg = ByteArray(encryptedByteArray.size - cipher.blockSize - cipher.blockSize)
-        instream.read(msg)
+        SecureRandom().nextBytes(salt)
+        os.write(salt)
 
         val secret = getSecretKeySpec(password, salt)
+        cipher.init(Cipher.ENCRYPT_MODE, secret, IvParameterSpec(iv))
 
+        val cos = CipherOutputStream(os, cipher)
+
+        input.copyTo(cos)
+
+        cos.close()
+    }
+
+    fun decrypt(input: InputStream, output: OutputStream) {
+        val cipher = Cipher.getInstance(transformations)
+
+        val iv = ByteArray(cipher.blockSize)
+        input.read(iv)
+
+        val salt = ByteArray(cipher.blockSize)
+        input.read(salt)
+
+        val secret = getSecretKeySpec(password, salt)
         cipher.init(Cipher.DECRYPT_MODE, secret, IvParameterSpec(iv))
-        return cipher.doFinal(msg).toString()
+
+        val cis = CipherInputStream(input, cipher)
+        cis.copyTo(output)
     }
 
     private fun getSecretKeySpec(
