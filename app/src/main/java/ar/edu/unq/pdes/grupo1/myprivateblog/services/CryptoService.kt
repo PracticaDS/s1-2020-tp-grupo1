@@ -1,16 +1,17 @@
 package ar.edu.unq.pdes.grupo1.myprivateblog.services
 
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
-import java.io.*
-import java.security.*
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import java.io.OutputStream
+import java.security.SecureRandom
 import java.security.spec.KeySpec
-import java.util.stream.Stream
 import javax.crypto.*
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
+@OptIn(ExperimentalStdlibApi::class)
 class CryptoService {
     private val keySpecAlgorithm: String = "AES"
     private val keyFactoryAlgorithm = "PBKDF2WithHmacSHA1"
@@ -18,6 +19,20 @@ class CryptoService {
     private val keySpecIterationCount = 65536
     private val keySpecKeyLength = 256
     private val password = "pepita"
+    private val charset = Charsets.UTF_8
+
+    fun encrypt(input: String): String {
+        return encrypt(input.toByteArray(charset)).toString(charset)
+    }
+
+    fun encrypt(input: ByteArray): ByteArray {
+        val istream = ByteArrayInputStream(input)
+        val ostream = ByteArrayOutputStream()
+
+        encrypt(istream, ostream)
+
+        return ostream.toByteArray()
+    }
 
     fun encrypt(input: InputStream, os: OutputStream) {
         val cipher = Cipher.getInstance(transformations)
@@ -38,6 +53,23 @@ class CryptoService {
         input.copyTo(cos)
 
         cos.close()
+    }
+
+    fun decrypt(input: String): String {
+return decrypt(input.toByteArray(charset)).toString(charset)
+    }
+
+    fun decrypt(input: ByteArray): ByteArray {
+        val istream = ByteArrayInputStream(input)
+        val ostream = ByteArrayOutputStream()
+
+
+        decrypt(
+            istream,
+            ostream
+        )
+
+        return ostream.toByteArray()
     }
 
     fun decrypt(input: InputStream, output: OutputStream) {

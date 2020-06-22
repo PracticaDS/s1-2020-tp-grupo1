@@ -1,7 +1,7 @@
 package ar.edu.unq.pdes.grupo1.myprivateblog.services
 
 
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.io.ByteArrayInputStream
@@ -25,7 +25,7 @@ class CryptoServiceTest {
 
     @Before
     fun initClearText() {
-        clearText = "super secret"
+        clearText = "super secret0000"
     }
 
     @ExperimentalStdlibApi
@@ -52,6 +52,69 @@ class CryptoServiceTest {
         assertEquals(
             clearText,
             decripted.decodeToString()
+        )
+    }
+
+    @Test
+    fun encriptingAByteArrayAndDecriptingItShouldReturnAnEqualByteArray() {
+        val expected = clearText.toByteArray()
+        val actual = criptoService.decrypt(criptoService.encrypt(clearText.toByteArray()))
+
+        assertArrayEquals(
+            expected,
+            actual
+        )
+    }
+
+    @Test
+    fun encriptingAByteArrayShouldReturnANonEqualByteArray() {
+        val clearTextByteArray = clearText.toByteArray()
+
+        assertNotEquals(
+            clearTextByteArray,
+            criptoService.encrypt(clearTextByteArray)
+        )
+    }
+    @Test
+    fun decriptingAByteArrayShouldReturnANonEqualByteArray() {
+        val clearTextByteArray = clearText.toByteArray()
+
+        assertNotEquals(
+            clearTextByteArray,
+            criptoService.decrypt(clearTextByteArray)
+        )
+    }
+
+    @Test
+    fun encriptingAStringAndDecriptingItShouldReturnAnEqualString() {
+        assertEquals(
+            clearText,
+            criptoService.decrypt(criptoService.encrypt(clearText))
+        )
+    }
+
+    @Test
+    fun encriptingAStringShouldReturnANonEqualString() {
+        assertNotEquals(
+            clearText,
+            criptoService.encrypt(clearText)
+        )
+    }
+    @Test
+    fun decriptingAStringShouldReturnANonEqualString() {
+        assertNotEquals(
+            clearText,
+            criptoService.decrypt(clearText)
+        )
+    }
+
+    @ExperimentalStdlibApi
+    @Test
+    fun pepita() {
+        val str = "super secrets"
+        assertEquals(
+            str,
+            str.toByteArray().decodeToString()
         )
     }
 }
