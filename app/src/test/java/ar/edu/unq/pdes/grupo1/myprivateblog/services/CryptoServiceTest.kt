@@ -25,7 +25,7 @@ class CryptoServiceTest {
 
     @Before
     fun initClearText() {
-        clearText = "super secret0000"
+        clearText = "super secret"
     }
 
     @ExperimentalStdlibApi

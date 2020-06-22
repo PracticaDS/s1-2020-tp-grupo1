@@ -19,14 +19,13 @@ class CryptoService {
     private val keySpecIterationCount = 65536
     private val keySpecKeyLength = 256
     private val password = "pepita"
-    private val charset = Charsets.UTF_8
 
     fun encrypt(input: String): String {
-        return encrypt(input.toByteArray(charset)).toString(charset)
+        return encrypt(input.encodeToByteArray()).decodeToString()
     }
 
     fun encrypt(input: ByteArray): ByteArray {
-        val istream = ByteArrayInputStream(input)
+        val istream = input.inputStream()
         val ostream = ByteArrayOutputStream()
 
         encrypt(istream, ostream)
@@ -56,11 +55,11 @@ class CryptoService {
     }
 
     fun decrypt(input: String): String {
-return decrypt(input.toByteArray(charset)).toString(charset)
+        return encrypt(input.encodeToByteArray()).decodeToString()
     }
 
     fun decrypt(input: ByteArray): ByteArray {
-        val istream = ByteArrayInputStream(input)
+        val istream = input.inputStream()
         val ostream = ByteArrayOutputStream()
 
 
