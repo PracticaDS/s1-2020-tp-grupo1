@@ -1,6 +1,5 @@
 package ar.edu.unq.pdes.grupo1.myprivateblog.services
 
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.OutputStream
@@ -21,7 +20,7 @@ class CryptoService {
     private val password = "pepita"
 
     fun encrypt(input: String): String {
-        return encrypt(input.encodeToByteArray()).decodeToString()
+        return toString(encrypt(input.toByteArray()))
     }
 
     fun encrypt(input: ByteArray): ByteArray {
@@ -55,7 +54,7 @@ class CryptoService {
     }
 
     fun decrypt(input: String): String {
-        return encrypt(input.encodeToByteArray()).decodeToString()
+        return String(decrypt(toByteArray(input)))
     }
 
     fun decrypt(input: ByteArray): ByteArray {
@@ -100,5 +99,29 @@ class CryptoService {
         val factory: SecretKeyFactory = SecretKeyFactory.getInstance(keyFactoryAlgorithm)
         val secretKey: SecretKey = factory.generateSecret(spec)
         return SecretKeySpec(secretKey.encoded, keySpecAlgorithm)
+    }
+
+    private fun toByteArray(hexString: String): ByteArray {
+        val len = hexString.length / 2
+        val result = ByteArray(len)
+        for (i in 0 until len) result[i] = Integer.valueOf(
+            hexString.substring(2 * i, 2 * i + 2),
+            16
+        ).toByte()
+        return result
+    }
+
+    private fun toString(buf: ByteArray): String {
+        val result = StringBuffer(2 * buf.size)
+        for (i in buf.indices) {
+            appendHex(result, buf[i])
+        }
+        return result.toString()
+    }
+
+    private val HEX = "0123456789ABCDEF"
+
+    private fun appendHex(sb: StringBuffer, b: Byte) {
+        sb.append(HEX[(b.toInt() shr 4) and 0x0f]).append(HEX[0x0f.and(b.toInt())])
     }
 }

@@ -9,13 +9,13 @@ import java.io.ByteArrayOutputStream
 
 class CryptoServiceTest {
 
-    lateinit var criptoService: CryptoService
+    lateinit var cryptoService: CryptoService
     lateinit var password: String
     lateinit var clearText: String
 
     @Before
     fun initCryptoService() {
-        criptoService = CryptoService()
+        cryptoService = CryptoService()
     }
 
     @Before
@@ -34,7 +34,7 @@ class CryptoServiceTest {
         val istream = ByteArrayInputStream(clearText.toByteArray())
         val ostream = ByteArrayOutputStream()
 
-        criptoService.encrypt(istream, ostream)
+        cryptoService.encrypt(istream, ostream)
 
         val encripted = ostream.toByteArray()
 
@@ -42,7 +42,7 @@ class CryptoServiceTest {
         val ostream2 = ByteArrayOutputStream()
 
 
-        criptoService.decrypt(
+        cryptoService.decrypt(
             istream2,
             ostream2
         )
@@ -58,7 +58,7 @@ class CryptoServiceTest {
     @Test
     fun encriptingAByteArrayAndDecriptingItShouldReturnAnEqualByteArray() {
         val expected = clearText.toByteArray()
-        val actual = criptoService.decrypt(criptoService.encrypt(clearText.toByteArray()))
+        val actual = cryptoService.decrypt(cryptoService.encrypt(clearText.toByteArray()))
 
         assertArrayEquals(
             expected,
@@ -72,7 +72,7 @@ class CryptoServiceTest {
 
         assertNotEquals(
             clearTextByteArray,
-            criptoService.encrypt(clearTextByteArray)
+            cryptoService.encrypt(clearTextByteArray)
         )
     }
     @Test
@@ -81,7 +81,7 @@ class CryptoServiceTest {
 
         assertNotEquals(
             clearTextByteArray,
-            criptoService.decrypt(clearTextByteArray)
+            cryptoService.decrypt(clearTextByteArray)
         )
     }
 
@@ -89,7 +89,7 @@ class CryptoServiceTest {
     fun encriptingAStringAndDecriptingItShouldReturnAnEqualString() {
         assertEquals(
             clearText,
-            criptoService.decrypt(criptoService.encrypt(clearText))
+            cryptoService.decrypt(cryptoService.encrypt(clearText))
         )
     }
 
@@ -97,24 +97,7 @@ class CryptoServiceTest {
     fun encriptingAStringShouldReturnANonEqualString() {
         assertNotEquals(
             clearText,
-            criptoService.encrypt(clearText)
-        )
-    }
-    @Test
-    fun decriptingAStringShouldReturnANonEqualString() {
-        assertNotEquals(
-            clearText,
-            criptoService.decrypt(clearText)
-        )
-    }
-
-    @ExperimentalStdlibApi
-    @Test
-    fun pepita() {
-        val str = "super secrets"
-        assertEquals(
-            str,
-            str.toByteArray().decodeToString()
+            cryptoService.encrypt(clearText)
         )
     }
 }
