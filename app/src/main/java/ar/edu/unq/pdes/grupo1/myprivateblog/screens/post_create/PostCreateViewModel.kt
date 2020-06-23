@@ -25,9 +25,9 @@ open class PostCreateViewModel @Inject constructor(
     var postId: Int = 0
 
     fun createPost() {
-
         val disposable = blogEntriesService.createBlogEntry(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
             .subscribe({
+                val blog = Blog(titleText.value.toString(), bodyText.value.toString(), cardColor.value!!)
                 postId = it.toInt()
                 state.value =
                     State.SUCCESS
@@ -42,3 +42,5 @@ open class PostCreateViewModel @Inject constructor(
     }
 
 }
+
+data class Blog(var title: String?, var body: String?, var cardColor: Int)

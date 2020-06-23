@@ -18,6 +18,7 @@ import ar.edu.unq.pdes.grupo1.myprivateblog.screens.posts_listing.PostsListingVi
 import ar.edu.unq.pdes.grupo1.myprivateblog.screens.sign_in.SignInFragment
 import ar.edu.unq.pdes.grupo1.myprivateblog.screens.sign_in.SignInViewModel
 import ar.edu.unq.pdes.grupo1.myprivateblog.services.BlogEntriesService
+import ar.edu.unq.pdes.grupo1.myprivateblog.services.CryptoService
 import dagger.*
 import dagger.android.AndroidInjector
 import dagger.android.ContributesAndroidInjector
@@ -59,10 +60,17 @@ open class ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideBlogEntriesService(blogEntriesRepository: BlogEntriesRepository, context: Context): BlogEntriesService {
+    fun provideCryptoService(): CryptoService {
+        return CryptoService()
+    }
+
+    @Singleton
+    @Provides
+    fun provideBlogEntriesService(blogEntriesRepository: BlogEntriesRepository, context: Context, cryptoService: CryptoService): BlogEntriesService {
         return BlogEntriesService(
             blogEntriesRepository,
-            context
+            context,
+            cryptoService
         )
     }
 }

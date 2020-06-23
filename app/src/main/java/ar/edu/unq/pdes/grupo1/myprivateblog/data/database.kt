@@ -78,6 +78,9 @@ interface BlogEntriesDao {
 
     @Delete
     fun delete(entry: BlogEntry): Completable
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertOrUpdate(blogEntries: List<BlogEntry>): Completable
 }
 
 object ThreeTenTimeTypeConverters {
