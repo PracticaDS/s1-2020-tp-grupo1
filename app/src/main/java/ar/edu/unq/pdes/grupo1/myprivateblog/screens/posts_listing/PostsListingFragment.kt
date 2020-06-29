@@ -17,7 +17,6 @@ import ar.edu.unq.pdes.grupo1.myprivateblog.ColorUtils
 import ar.edu.unq.pdes.grupo1.myprivateblog.R
 import ar.edu.unq.pdes.grupo1.myprivateblog.data.BlogEntry
 import ar.edu.unq.pdes.grupo1.myprivateblog.data.EntityID
-import ar.edu.unq.pdes.grupo1.myprivateblog.screens.posts_listing.PostsListingFragmentDirections
 import kotlinx.android.synthetic.main.fragment_posts_listing.*
 
 class PostsListingFragment : BaseFragment() {

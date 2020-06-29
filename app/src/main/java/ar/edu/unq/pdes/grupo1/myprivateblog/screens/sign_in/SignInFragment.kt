@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import ar.edu.unq.pdes.grupo1.myprivateblog.BaseFragment
 import ar.edu.unq.pdes.grupo1.myprivateblog.R
@@ -11,15 +12,17 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 
-class SignInFragment : BaseFragment() {
+class SignInFragment: BaseFragment() {
     override val layoutId: Int
         get() = R.layout.fragment_sign_in
 
     private val RC_SIGN_IN = 123
 
+    protected open val viewModel by viewModels<SignInViewModel> { viewModelFactory }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.generatePassword()
         val auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
             // already signed in
