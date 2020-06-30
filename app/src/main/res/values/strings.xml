@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyPrivateBlog</string>
+    <string name="app_name">My Private Blog</string>
     <string name="hint_post_title">My Post Title</string>
     <string name="PostEditSuccess">Post editado.</string>
     <string name="create_post_message">Empezá a tomar tus notas</string>
@@ -10,4 +10,5 @@
     <string name="passphrase">Esta es tu passphrase: \n\n\n %1$s \n\n\nEn caso
         de que cambies de dispositivo o borres la aplicación,
         deberás ingresarla para recuperar tus notas.</string>
+    <string name="my_private_blog_logo">My private blog logo</string>
 </resources>
