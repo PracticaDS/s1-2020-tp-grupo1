@@ -1,32 +1,48 @@
 package ar.edu.unq.pdes.grupo1.myprivateblog.services
 
 
+import android.content.Context
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.junit.MockitoJUnitRunner
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import org.mockito.Mockito.`when`
+import java.io.File
+import java.io.FileOutputStream
 
+@RunWith(MockitoJUnitRunner.Silent::class)
 class CryptoServiceTest {
 
     lateinit var cryptoService: CryptoService
-    lateinit var password: String
     lateinit var clearText: String
+    @Mock
+    private lateinit var context: Context
 
     @Before
     fun initCryptoService() {
-        cryptoService = CryptoService()
+        `when`(context.openFileOutput("password",Context.MODE_PRIVATE))
+            .thenReturn(FileOutputStream("password"))
+
+        cryptoService = CryptoService(context)
+        cryptoService.generatePassword()
     }
 
-    @Before
-    fun initPassword() {
-        password = "pepita123456789frgtyhuidcvbnmertyu"
+    @After
+    fun tearDown(){
+       File(context.filesDir,"password").delete()
     }
+
 
     @Before
     fun initClearText() {
         clearText = "super secret"
     }
+
 
     @ExperimentalStdlibApi
     @Test

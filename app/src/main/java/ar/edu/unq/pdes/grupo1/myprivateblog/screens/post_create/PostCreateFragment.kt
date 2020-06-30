@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import ar.edu.unq.pdes.grupo1.myprivateblog.BaseFragment
 import ar.edu.unq.pdes.grupo1.myprivateblog.ColorUtils
 import ar.edu.unq.pdes.grupo1.myprivateblog.R
-import ar.edu.unq.pdes.grupo1.myprivateblog.screens.post_create.PostCreateFragmentDirections
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.fragment_post_edit.*

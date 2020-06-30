@@ -17,7 +17,7 @@ import ar.edu.unq.pdes.grupo1.myprivateblog.ColorUtils
 import ar.edu.unq.pdes.grupo1.myprivateblog.R
 import ar.edu.unq.pdes.grupo1.myprivateblog.data.BlogEntry
 import ar.edu.unq.pdes.grupo1.myprivateblog.data.EntityID
-import ar.edu.unq.pdes.grupo1.myprivateblog.screens.posts_listing.PostsListingFragmentDirections
+import ar.edu.unq.pdes.grupo1.myprivateblog.screens.PassphraseDialog
 import kotlinx.android.synthetic.main.fragment_posts_listing.*
 
 class PostsListingFragment : BaseFragment() {
@@ -50,6 +50,11 @@ class PostsListingFragment : BaseFragment() {
             posts_list_recyclerview.layoutManager = LinearLayoutManager(context)
 
             no_posts.isVisible = postList.isEmpty()
+
+            passphrase_button.setOnClickListener {
+                val dialog = PassphraseDialog(viewModel.getPassphrase())
+                dialog.show(parentFragmentManager,"dialog")
+            }
 
         })
     }

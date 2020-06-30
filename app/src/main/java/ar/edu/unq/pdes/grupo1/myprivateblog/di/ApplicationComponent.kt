@@ -60,8 +60,8 @@ open class ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideCryptoService(): CryptoService {
-        return CryptoService()
+    fun provideCryptoService(context: Context): CryptoService {
+        return CryptoService(context)
     }
 
     @Singleton

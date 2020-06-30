@@ -5,6 +5,7 @@ import android.content.Intent
 import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import ar.edu.unq.pdes.grupo1.myprivateblog.BaseFragment
@@ -15,15 +16,17 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 import kotlin.math.sign
 
-class SignInFragment : BaseFragment() {
+class SignInFragment: BaseFragment() {
     override val layoutId: Int
         get() = R.layout.fragment_sign_in
 
     private val RC_SIGN_IN = 123
 
+    protected open val viewModel by viewModels<SignInViewModel> { viewModelFactory }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.generatePassword()
         val auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
             navigateToBlogEntriesList()

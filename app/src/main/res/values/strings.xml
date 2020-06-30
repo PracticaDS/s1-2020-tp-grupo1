@@ -6,5 +6,9 @@
     <string name="PostEditError">Algo salió mal. Intentelo más tarde.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="passphraseButton">Código de recuperación</string>
+    <string name="passphrase">Esta es tu passphrase: \n\n\n %1$s \n\n\nEn caso
+        de que cambies de dispositivo o borres la aplicación,
+        deberás ingresarla para recuperar tus notas.</string>
     <string name="my_private_blog_logo">My private blog logo</string>
 </resources>

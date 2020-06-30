@@ -6,12 +6,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/header_background"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+    <ImageView
+        android:id="@+id/passphrase_button"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:padding="8dp"
+        android:src="@android:drawable/ic_lock_idle_lock"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/posts_list_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/palette_pastel_yellow_02" />
-
+        android:background="@color/palette_pastel_yellow_02"
+        app:layout_constraintTop_toBottomOf="@id/header_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp" />
 
     <include layout="@layout/fragment_no_posts"
         android:id="@+id/no_posts"
@@ -36,5 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:tint="@color/white" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
